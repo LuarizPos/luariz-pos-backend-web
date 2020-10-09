@@ -1,0 +1,12 @@
+.env
+migrations
+*.DS_Store
+*.vscode
+Pipfile.lock
+
+/migrations/__pycache__
+/__pycache__
+/app/__pycache__
+/app/controller/__pycache__
+/app/models/__pycache__
+/router/__pycache__
