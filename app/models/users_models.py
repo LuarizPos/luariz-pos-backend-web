@@ -1,4 +1,3 @@
-from flask_sqlalchemy import SQLAlchemy
 from app.manage import db,ma
 
 class UsersModel(db.Model):
