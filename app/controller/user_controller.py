@@ -1,7 +1,9 @@
-from flask import Flask, request, jsonify
-from flask_restful import Resource, Api
+from flask import request, jsonify
+from flask_restful import Resource
 from app.helpers.helpers import Helpers
-from app.manage import db,ma
+from app.helpers.response import ResponseApi
+from app.helpers.validation import ValidationInput
+from app.manage import db
 from app.models.users_models import UsersModel, UsersSchema
 import json
 import hashlib 
@@ -26,30 +28,38 @@ class UsersController(Resource):
             form_req = param['form']
             if form_req:
                 try:
-                    name = form_req['name'] 
-                    email = form_req['email']
-                    password = form_req['password']
-                    password = hashlib.md5(password.encode('utf-8')).hexdigest()
-                    status = form_req['status']
-                    position = form_req['position']
-                    role_id = form_req['role_id']
-                    new_user = UsersModel(name, email, password, True, position, role_id)
-                    db.session.add(new_user)
-                    db.session.commit()
-                    result = {
-                        "code" : 200,
-                        "message ": "Data Save Succes"
-                    }
+                    validation = ValidationInput().validation_register(form_req)
+                    if validation['code'] == 200:
+                        input_data = validation['result']
+                        new_user = UsersModel(input_data['name'], input_data['email'] , input_data['password'], True, input_data['position'], input_data['role_id'])
+                        db.session.add(new_user)
+                        db.session.commit()
+                        result = {
+                            "code" : 200,
+                            "message": "Register Succes"
+                        }
+                    else:
+                        result = {
+                            "code" : validation['code'],
+                            "message": validation['message']
+                        }
                 except Exception as e:
                     error  = str(e)
                     result = {
                         "code" : 400,
-                        "message ": error
+                        "message": error
                     }
             else:
                 result = {
                     "code" : 400,
-                    "message ": "Form Request Is Empty"
+                    "message": "Form Request Is Empty"
                 }
-            
-        return jsonify(result)
+        else:
+            result = {
+                "code" : 400,
+                "message": "Form Request Is Empty"
+            }
+        
+        response = ResponseApi().response_api(result)
+        return jsonify(response)
+    
