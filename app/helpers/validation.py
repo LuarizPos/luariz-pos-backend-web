@@ -60,3 +60,27 @@ class ValidationInput(Resource):
                 }
             }
         return result
+
+    def validation_login(self,param):
+        if param['email'] == "" :
+            result = {
+                "code" : 400,
+                "message": "email is required",
+                "result": []
+            }
+        elif param['password'] == '':
+            result = {
+                "code" : 400,
+                "message": "password is required",
+                "result": []
+            }
+        else:
+            result = {
+                "code" : 200,
+                "message": "Param Complete",
+                "result": {
+                    'email': param['email'],
+                    'password': hashlib.md5(param['password'].encode('utf-8')).hexdigest(),
+                }
+            }
+        return result

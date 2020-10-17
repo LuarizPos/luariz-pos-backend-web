@@ -4,17 +4,30 @@ from flask import request
 
 urls_blueprint = Blueprint('urls', __name__,)
 
-@urls_blueprint.route('/get_user')
+@urls_blueprint.route('/get_user', methods=['POST'])
 def get_user():
-    return UsersController().get_user()
+    param = {
+        'form':request.form,
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
+    }
+    return UsersController().get_user(param)
 
 @urls_blueprint.route('/register_user', methods=['POST'])
 def register_user():
     param = {
         'form':request.form,
-        'headers':request.headers['Authorization']
+        'auth':request.headers['Authorization']
     }
     return UsersController().register_user(param)
+
+@urls_blueprint.route('/login_user', methods=['POST'])
+def login_user():
+    param = {
+        'form':request.form,
+        'auth':request.headers['Authorization']
+    }
+    return UsersController().login_user(param)
 
 @urls_blueprint.route('/generate_token', methods=['POST'])
 def generate_token():
