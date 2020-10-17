@@ -10,15 +10,18 @@ class UsersModel(db.Model):
     status = db.Column(db.Boolean, default=False)
     position = db.Column(db.String(200))
     role_id =  db.Column(db.Integer)
+    token =  db.Column(db.String(500))
 
-    def __init__(self, name, email, password, status, position, role_id):
+
+    def __init__(self, name, email, password, status, position, role_id,token):
         self.name = name
         self.email = email
         self.password = password
         self.status = status
         self.position = position
         self.role_id = role_id
+        self.token = token
 
 class UsersSchema(ma.Schema):
   class Meta:
-    fields = ('id', 'name', 'email', 'password', 'status', 'position', 'role_id')
+    fields = ('id', 'name', 'email', 'password', 'status', 'position', 'role_id', 'token')
