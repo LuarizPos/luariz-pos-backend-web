@@ -9,4 +9,4 @@ flask-restful = "*"
 flask-script = "*"
 datetime = "*"
 gunicorn = "*"
-pybase64 = 1.0.1
+pybase64 = "*"

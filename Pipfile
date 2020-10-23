@@ -17,7 +17,7 @@ flask-restful = "*"
 flask-script = "*"
 datetime = "*"
 gunicorn = "*"
-pybase64 = 1.0.1
+pybase64 = "*"
 
 [requires]
 python_version = "3.8"
