@@ -95,7 +95,10 @@ class UsersController(Resource):
                             "code" : 200,
                             "endpoint": "Register",
                             "message": "Register Succes",
-                            "result": {}
+                            "result": {
+                                "name" : input_data['name'],
+                                "email" : input_data['email']
+                            }
                         }
                     else:
                         result = {
