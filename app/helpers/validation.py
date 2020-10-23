@@ -84,3 +84,20 @@ class ValidationInput(Resource):
                 }
             }
         return result
+    
+    def validation_get_users(self,param):
+        if param['email'] == "" :
+            result = {
+                "code" : 400,
+                "message": "email is required",
+                "result": []
+            }
+        else:
+            result = {
+                "code" : 200,
+                "message": "Param Complete",
+                "result": {
+                    'email': param['email'],
+                }
+            }
+        return result
