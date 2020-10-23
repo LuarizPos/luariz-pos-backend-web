@@ -7,7 +7,7 @@ class ResponseApi(Resource):
             "API_LuarizPost": {
                 "Version": "V.1",
                 "Timestamp": "2020-10-03T02:10:14+07:00",
-                "NameEnd": "Register",
+                "NameEnd": param['endpoint'],
                 "Status": "Complete",
                 "Message": {
                     "Type": "Info",
@@ -15,7 +15,7 @@ class ResponseApi(Resource):
                     "Speed": "21.36",
                     "Code": param['code']
                 },
-                "Body": {}
+                "Response": param['result']
             }
         }
         return response
