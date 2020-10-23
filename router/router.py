@@ -2,7 +2,7 @@ from flask import Blueprint
 from app.controller.user_controller import UsersController
 from flask import request
 
-urls_blueprint = Blueprint('urls', __name__,)
+urls_blueprint = Blueprint('urls', __name__, url_prefix='/v1')
 
 @urls_blueprint.route('/get_user', methods=['POST'])
 def get_user():

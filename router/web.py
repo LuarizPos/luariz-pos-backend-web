@@ -1,8 +1,8 @@
 from flask import Blueprint
 from flask import request
 
-web_blueprint = Blueprint('urls', __name__,)
+web_blueprint = Blueprint('web', __name__, url_prefix='/')
 
-@urls_blueprint.route('/', methods=['GET'])
+@web_blueprint.route('/', methods=['GET'])
 def hello_word():
-    return "HELLO WORD"
+    return "HELLO"
