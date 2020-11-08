@@ -5,8 +5,6 @@ from app.helpers.helpers import Helpers
 from app.helpers.response import ResponseApi
 from app.manage import db
 from PIL import Image
-import pdb
-import types
 import io
 
 
