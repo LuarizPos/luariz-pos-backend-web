@@ -19,6 +19,7 @@ datetime = "*"
 gunicorn = "*"
 pybase64 = "*"
 psycopg2 = "*"
+pil = "*"
 
 [requires]
 python_version = "3.8"
