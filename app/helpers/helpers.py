@@ -34,6 +34,14 @@ class Helpers(Resource):
         message_bytes = pybase64.b64decode(bytess, altchars='_:', validate=True)
         return message_bytes
     
+    def decode_image(self,image_encode):
+        try:
+            image_bytes = image_encode.encode('utf-8')
+            image_decode = pybase64.b64decode(image_bytes, altchars='_:', validate=True)
+        except Exception as e:
+            image_decode = 0
+        return image_decode
+    
     def cek_auth(self,param):
         body_req = {
             "secret_text": os.getenv('SECRET_TOKEN')

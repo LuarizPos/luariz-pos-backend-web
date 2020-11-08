@@ -8,7 +8,6 @@ from datetime import datetime, timedelta
 from app.models.users_models import UsersModel, UsersSchema
 import json
 import os
-import hashlib 
 
 user_schema = UsersSchema()
 users_schema = UsersSchema(many=True)
