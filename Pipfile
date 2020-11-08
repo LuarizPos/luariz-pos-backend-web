@@ -19,7 +19,7 @@ datetime = "*"
 gunicorn = "*"
 pybase64 = "*"
 psycopg2 = "*"
-
+Pillow = "*"
 
 [requires]
 python_version = "3.8"

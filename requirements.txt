@@ -10,4 +10,4 @@ flask-script = "*"
 datetime = "*"
 gunicorn = "*"
 pybase64 = "*"
-
+Pillow = "*"
