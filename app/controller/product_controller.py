@@ -15,8 +15,8 @@ UPLOAD_FOLDER = 'assets/images/'
 class ProductController(Resource):
     def get_product(self,param):
         if Helpers().cek_auth(param):
-            cek_session = Helpers().cek_session(param)
-            if cek_session['code'] == 200:
+            # cek_session = Helpers().cek_session(param)
+            # if cek_session['code'] == 200:
                 form_req = param['form']
                 if form_req:
                     try:
@@ -51,13 +51,13 @@ class ProductController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            else:
-                result = {
-                    "code" : cek_session['code'],
-                    "endpoint": "Get Product",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+            # else:
+            #     result = {
+            #         "code" : cek_session['code'],
+            #         "endpoint": "Get Product",
+            #         "message": cek_session['message'],
+            #         "result": {}
+            #     }
         else:
             result = {
                 "code" : 400,
@@ -70,8 +70,8 @@ class ProductController(Resource):
     
     def insert_product(self,param):
         if Helpers().cek_auth(param):
-            cek_session = Helpers().cek_session(param)
-            if cek_session['code'] == 200:
+            # cek_session = Helpers().cek_session(param)
+            # if cek_session['code'] == 200:
                 form_req = param['form']
                 if form_req:
                     try:
@@ -139,13 +139,13 @@ class ProductController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            else:
-                result = {
-                    "code" : cek_session['code'],
-                    "endpoint": "Insert Product",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+            # else:
+            #     result = {
+            #         "code" : cek_session['code'],
+            #         "endpoint": "Insert Product",
+            #         "message": cek_session['message'],
+            #         "result": {}
+            #     }
         else:
             result = {
                 "code" : 400,
@@ -159,8 +159,8 @@ class ProductController(Resource):
             
     def update_product(self,param):
         if Helpers().cek_auth(param):
-            cek_session = Helpers().cek_session(param)
-            if cek_session['code'] == 200:
+            # cek_session = Helpers().cek_session(param)
+            # if cek_session['code'] == 200:
                 form_req = param['form']
                 if form_req:
                     try:
@@ -229,13 +229,13 @@ class ProductController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            else:
-                result = {
-                    "code" : cek_session['code'],
-                    "endpoint": "Update Product",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+            # else:
+            #     result = {
+            #         "code" : cek_session['code'],
+            #         "endpoint": "Update Product",
+            #         "message": cek_session['message'],
+            #         "result": {}
+            #     }
         else:
             result = {
                 "code" : 400,

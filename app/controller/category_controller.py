@@ -14,8 +14,8 @@ categorys_schema = CategorySchema(many=True)
 class CategoryController(Resource):
     def get_category(self,param):
         if Helpers().cek_auth(param):
-            cek_session = Helpers().cek_session(param)
-            if cek_session['code'] == 200:
+            # cek_session = Helpers().cek_session(param)
+            # if cek_session['code'] == 200:
                 form_req = param['form']
                 if form_req:
                     try:
@@ -50,13 +50,13 @@ class CategoryController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            else:
-                result = {
-                    "code" : cek_session['code'],
-                    "endpoint": "Get Category",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+            # else:
+            #     result = {
+            #         "code" : cek_session['code'],
+            #         "endpoint": "Get Category",
+            #         "message": cek_session['message'],
+            #         "result": {}
+            #     }
         else:
             result = {
                 "code" : 400,
@@ -69,8 +69,8 @@ class CategoryController(Resource):
     
     def insert_category(self,param):
         if Helpers().cek_auth(param):
-            cek_session = Helpers().cek_session(param)
-            if cek_session['code'] == 200:
+            # cek_session = Helpers().cek_session(param)
+            # if cek_session['code'] == 200:
                 form_req = param['form']
                 if form_req:
                     try:
@@ -105,13 +105,13 @@ class CategoryController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            else:
-                result = {
-                    "code" : cek_session['code'],
-                    "endpoint": "Insert Category",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+            # else:
+            #     result = {
+            #         "code" : cek_session['code'],
+            #         "endpoint": "Insert Category",
+            #         "message": cek_session['message'],
+            #         "result": {}
+            #     }
         else:
             result = {
                 "code" : 400,
@@ -125,8 +125,8 @@ class CategoryController(Resource):
             
     def update_category(self,param):
         if Helpers().cek_auth(param):
-            cek_session = Helpers().cek_session(param)
-            if cek_session['code'] == 200:
+            # cek_session = Helpers().cek_session(param)
+            # if cek_session['code'] == 200:
                 form_req = param['form']
                 if form_req:
                     try:
@@ -164,13 +164,13 @@ class CategoryController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            else:
-                result = {
-                    "code" : cek_session['code'],
-                    "endpoint": "Update Category",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+            # else:
+            #     result = {
+            #         "code" : cek_session['code'],
+            #         "endpoint": "Update Category",
+            #         "message": cek_session['message'],
+            #         "result": {}
+            #     }
         else:
             result = {
                 "code" : 400,

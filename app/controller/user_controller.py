@@ -16,8 +16,8 @@ users_schema = UsersSchema(many=True)
 class UsersController(Resource):
     def get_user(self,param):
         if Helpers().cek_auth(param):
-            cek_session = Helpers().cek_session(param)
-            if cek_session['code'] == 200:
+            # cek_session = Helpers().cek_session(param)
+            # if cek_session['code'] == 200:
                  form_req = param['form']
                  validation = ValidationInput().validation_get_users(form_req)
                  if validation['code'] == 200:
@@ -55,13 +55,13 @@ class UsersController(Resource):
                             "result": {}
                         }
 
-            else:
-                result = {
-                    "code" : cek_session['code'],
-                    "endpoint": "Get Users",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+            # else:
+            #     result = {
+            #         "code" : cek_session['code'],
+            #         "endpoint": "Get Users",
+            #         "message": cek_session['message'],
+            #         "result": {}
+            #     }
             
         else:
             result = {

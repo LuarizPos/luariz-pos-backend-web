@@ -11,9 +11,10 @@ urls_blueprint = Blueprint('urls', __name__, url_prefix='/v1')
 @urls_blueprint.route('/get_user', methods=['POST'])
 def get_user():
     param = {
-        'form':request.form,
-        'auth':request.headers['Authorization'],
-        'token':request.headers['Token']
+        'form':request.json['GetUser'],
+        # 'auth':request.headers['Authorization'],
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        # 'token':request.headers['Token']
     }
     return UsersController().get_user(param)
 
@@ -21,7 +22,8 @@ def get_user():
 def register_user():
     param = {
         'form':request.json['Register'],
-        'auth':request.headers['Authorization']
+        # 'auth':request.headers['Authorization']
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
     }
     return UsersController().register_user(param)
 
@@ -29,7 +31,8 @@ def register_user():
 def login_user():
     param = {
         'form':request.json['Login'],
-        'auth':request.headers['Authorization']
+        # 'auth':request.headers['Authorization']
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
     }
     return UsersController().login_user(param)
 
@@ -50,8 +53,9 @@ def decode_token():
 def insert_product():
     param = {
         'form':request.json['Product'],
-        'auth':request.headers['Authorization'],
-        'token':request.headers['Token']
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        # 'auth':request.headers['Authorization'],
+        # 'token':request.headers['Token']
     }
     
     return ProductController().insert_product(param)
@@ -60,8 +64,9 @@ def insert_product():
 def update_product():
     param = {
         'form':request.json['Product'],
-        'auth':request.headers['Authorization'],
-        'token':request.headers['Token']
+        # 'auth':request.headers['Authorization'],
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        # 'token':request.headers['Token']
     }
     
     return ProductController().update_product(param)
@@ -70,8 +75,9 @@ def update_product():
 def get_product():
     param = {
         'form':request.json['Product'],
-        'auth':request.headers['Authorization'],
-        'token':request.headers['Token']
+        # 'auth':request.headers['Authorization'],
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        # 'token':request.headers['Token']
     }
     
     return ProductController().get_product(param)
@@ -83,8 +89,9 @@ def get_product():
 def insert_category():
     param = {
         'form':request.json['Category'],
-        'auth':request.headers['Authorization'],
-        'token':request.headers['Token']
+        # 'auth':request.headers['Authorization'],
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        # 'token':request.headers['Token']
     }
     
     return CategoryController().insert_category(param)
@@ -93,8 +100,9 @@ def insert_category():
 def update_category():
     param = {
         'form':request.json['Category'],
-        'auth':request.headers['Authorization'],
-        'token':request.headers['Token']
+        # 'auth':request.headers['Authorization'],
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        # 'token':request.headers['Token']
     }
     
     return CategoryController().update_category(param)
@@ -103,8 +111,9 @@ def update_category():
 def get_category():
     param = {
         'form':request.json['Category'],
-        'auth':request.headers['Authorization'],
-        'token':request.headers['Token']
+        # 'auth':request.headers['Authorization'],
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        # 'token':request.headers['Token']
     }
     
     return CategoryController().get_category(param)
