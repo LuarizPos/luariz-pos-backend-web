@@ -82,9 +82,21 @@ def get_product():
     
     return ProductController().get_product(param)
 
+@urls_blueprint.route('/delete_product', methods=['POST'])
+def delete_product():
+    param = {
+        'form':request.json['Product'],
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        # 'auth':request.headers['Authorization'],
+        # 'token':request.headers['Token']
+    }
+    
+    return ProductController().delete_product(param)
+
+
 # ======================End router Producr ============================
 
-# ======================router Producr ============================
+# ======================router Category ============================
 @urls_blueprint.route('/insert_category', methods=['POST'])
 def insert_category():
     param = {
@@ -117,3 +129,14 @@ def get_category():
     }
     
     return CategoryController().get_category(param)
+
+@urls_blueprint.route('/delete_category', methods=['POST'])
+def delete_category():
+    param = {
+        'form':request.json['Category'],
+        # 'auth':request.headers['Authorization'],
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        # 'token':request.headers['Token']
+    }
+    
+    return CategoryController().delete_category(param)

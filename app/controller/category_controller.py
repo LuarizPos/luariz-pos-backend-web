@@ -181,3 +181,61 @@ class CategoryController(Resource):
         
         response = ResponseApi().response_api(result)
         return response
+    
+    def delete_category(self,param):
+        if Helpers().cek_auth(param):
+            # cek_session = Helpers().cek_session(param)
+            # if cek_session['code'] == 200:
+                form_req = param['form']
+                if form_req:
+                    try:
+                        resultData = []
+                        for form_value in form_req:
+                            id_category = form_value['id']
+                            category = CategoryModels.query.filter_by(id=id_category).first()
+                            category_value = category_schema.dump(category)
+                            db.session.delete(category)
+                            db.session.commit()
+                            data = {
+                                'id':category_value['id'],
+                                "name" : category_value['name'],
+                            }
+                            resultData.append(data)
+                        result = {
+                            "code" : 200,
+                            "endpoint": "Delete Category",
+                            "message": "Delete Category Succes",
+                            "result": resultData
+                        }
+                        
+                    except Exception as e:
+                        error  = str(e)
+                        result = {
+                            "code" : 400,
+                            "endpoint": "Delete Category",
+                            "message": error,
+                            "result": {}
+                        }
+                else:
+                    result = {
+                        "code" : 400,
+                        "endpoint": "Delete Category",
+                        "message": "Form Request Is Empty",
+                        "result": {}
+                    }
+            # else:
+            #     result = {
+            #         "code" : cek_session['code'],
+            #         "endpoint": "Update Category",
+            #         "message": cek_session['message'],
+            #         "result": {}
+            #     }
+        else:
+            result = {
+                "code" : 400,
+                "endpoint": "Delete Category",
+                "message": "Authentication signature calculation is wrong",
+                "result": {}
+            }
+        response = ResponseApi().response_api(result)
+        return response

@@ -3,9 +3,10 @@ from flask_restful import Resource
 from flask import request, jsonify
 from app.helpers.helpers import Helpers
 from app.helpers.response import ResponseApi
-from app.manage import db
+from app.manage import db, app
 from PIL import Image
 import io
+import os
 
 
 product_schema = ProductSchema()
@@ -20,21 +21,43 @@ class ProductController(Resource):
                 form_req = param['form']
                 if form_req:
                     try:
+                        resultData = []
                         showAll = form_req['ShowAll']
                         id_product = form_req['id_product']
                         if showAll:
                             Product = ProductModels.query.all()
-                            data = products_schema.dump(Product)
-                            
+                            data_product = products_schema.dump(Product)
+                            for product_value in data_product:
+                                data = {
+                                    "image": request.url_root+"display/"+product_value['image'],
+                                    "id": product_value['id'],
+                                    "price": product_value['price'],
+                                    "stock": product_value['stock'],
+                                    "description": product_value['description'],
+                                    "category_id": product_value['category_id'],
+                                    "name": product_value['name'],
+                                }
+                                resultData.append(data)
                         else:
                             Product = ProductModels.query.filter_by(id=id_product).first()
-                            data = product_schema.dump(Product)
+                            data_product = product_schema.dump(Product)
+                            data = {
+                                "image": request.url_root+"display/"+data_product['image'],
+                                "id": data_product['id'],
+                                "price": data_product['price'],
+                                "stock": data_product['stock'],
+                                "description": data_product['description'],
+                                "category_id": data_product['category_id'],
+                                "name": data_product['name'],
+                            }
+                            resultData.append(data)
                         
+
                         result = {
                             "code" : 200,
                             "endpoint": "Get Product",
                             "message": "Get Product Succes",
-                            "result": data
+                            "result": resultData
                         }
                     except Exception as e:
                         error  = str(e)
@@ -112,7 +135,7 @@ class ProductController(Resource):
                                 "name" : name_product,
                                 "category_id" : id_category,
                                 "description" : description,
-                                "image" : image,
+                                "image" : request.url_root+"display/"+image,
                                 "stock" : stock,
                                 "price" : price,
                             }
@@ -163,7 +186,7 @@ class ProductController(Resource):
             # if cek_session['code'] == 200:
                 form_req = param['form']
                 if form_req:
-                    try:
+                    # try:
                         resultData = []
                         for form_value in form_req:
                             id_product = form_value['id_product']
@@ -194,6 +217,13 @@ class ProductController(Resource):
                                         }
                                         response = ResponseApi().response_api(result)
                                         return response
+                            
+                            Product = ProductModels.query.filter_by(id=id_product)
+                            ge_product = ProductModels.query.filter_by(id=id_product).first()
+                            data_product = product_schema.dump(ge_product)
+                            if image == "":
+                                image = data_product["image"]
+                            
                             data = {
                                 "id" : id_product,
                                 "name" : name_product,
@@ -203,7 +233,6 @@ class ProductController(Resource):
                                 "stock" : stock,
                                 "price" : price,
                             }
-                            Product = ProductModels.query.filter_by(id=id_product)
                             Product.update(data)
                             db.session.commit()
                             resultData.append(data)
@@ -214,14 +243,14 @@ class ProductController(Resource):
                             "message": "Update Product Succes",
                             "result": resultData
                         }
-                    except Exception as e:
-                        error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "endpoint": "Update Product",
-                            "message": error,
-                            "result": {}
-                        }
+                    # except Exception as e:
+                    #     error  = str(e)
+                    #     result = {
+                    #         "code" : 400,
+                    #         "endpoint": "Update Product",
+                    #         "message": error,
+                    #         "result": {}
+                    #     }
                 else:
                     result = {
                         "code" : 400,
@@ -244,5 +273,63 @@ class ProductController(Resource):
                 "result": {}
             }
         
+        response = ResponseApi().response_api(result)
+        return response
+
+    def delete_product(self,param):
+        if Helpers().cek_auth(param):
+            # cek_session = Helpers().cek_session(param)
+            # if cek_session['code'] == 200:
+                form_req = param['form']
+                if form_req:
+                    try:
+                        resultData = []
+                        for form_value in form_req:
+                            id_product = form_value['id']
+                            product = ProductModels.query.filter_by(id=id_product).first()
+                            product_value = product_schema.dump(product)
+                            db.session.delete(product)
+                            db.session.commit()
+                            data = {
+                                'id':product_value['id'],
+                                "name" : product_value['name'],
+                            }
+                            resultData.append(data)
+                        result = {
+                            "code" : 200,
+                            "endpoint": "Delete Product",
+                            "message": "Delete Product Succes",
+                            "result": resultData
+                        }
+                        
+                    except Exception as e:
+                        error  = str(e)
+                        result = {
+                            "code" : 400,
+                            "endpoint": "Delete Product",
+                            "message": error,
+                            "result": {}
+                        }
+                else:
+                    result = {
+                        "code" : 400,
+                        "endpoint": "Delete Product",
+                        "message": "Form Request Is Empty",
+                        "result": {}
+                    }
+            # else:
+            #     result = {
+            #         "code" : cek_session['code'],
+            #         "endpoint": "Update Product",
+            #         "message": cek_session['message'],
+            #         "result": {}
+            #     }
+        else:
+            result = {
+                "code" : 400,
+                "endpoint": "Delete Product",
+                "message": "Authentication signature calculation is wrong",
+                "result": {}
+            }
         response = ResponseApi().response_api(result)
         return response

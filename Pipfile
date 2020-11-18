@@ -20,6 +20,7 @@ gunicorn = "*"
 pybase64 = "*"
 psycopg2 = "*"
 Pillow = "*"
+jinja2 = "*"
 
 [requires]
 python_version = "3.8"
