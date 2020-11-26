@@ -19,9 +19,9 @@ class ProductController(Resource):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
                 form_req = param['form']
+                resultData = []
                 if form_req:
                     try:
-                        resultData = []
                         showAll = form_req['ShowAll']
                         id_product = form_req['id_product']
                         if showAll:
@@ -96,9 +96,9 @@ class ProductController(Resource):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
                 form_req = param['form']
+                resultData = []
                 if form_req:
                     try:
-                        resultData = []
                         for form_value in form_req:
                             name_product = form_value['name']
                             id_category = form_value['id_category']
@@ -185,9 +185,9 @@ class ProductController(Resource):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
                 form_req = param['form']
+                resultData = []
                 if form_req:
                     # try:
-                        resultData = []
                         for form_value in form_req:
                             id_product = form_value['id_product']
                             name_product = form_value['name']
@@ -281,9 +281,9 @@ class ProductController(Resource):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
                 form_req = param['form']
+                resultData = []
                 if form_req:
                     try:
-                        resultData = []
                         for form_value in form_req:
                             id_product = form_value['id']
                             product = ProductModels.query.filter_by(id=id_product).first()
