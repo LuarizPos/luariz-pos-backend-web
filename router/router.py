@@ -2,6 +2,8 @@ from flask import Blueprint
 from app.controller.user_controller import UsersController
 from app.controller.product_controller import ProductController
 from app.controller.category_controller import CategoryController
+from app.controller.company_controller import ComponyController
+from app.controller.transaction_controller import TransactionController
 
 from flask import request
 
@@ -140,3 +142,99 @@ def delete_category():
     }
     
     return CategoryController().delete_category(param)
+
+
+# ======================end router Category ============================
+
+
+# ======================router Company ============================
+@urls_blueprint.route('/get_company', methods=['POST'])
+def get_company():
+    param = {
+        'form':request.json['Company'],
+        # 'auth':request.headers['Authorization'],
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        # 'token':request.headers['Token']
+    }
+    
+    return ComponyController().get_company(param)
+
+@urls_blueprint.route('/insert_company', methods=['POST'])
+def insert_company():
+    param = {
+        'form':request.json['Company'],
+        # 'auth':request.headers['Authorization'],
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        # 'token':request.headers['Token']
+    }
+    
+    return ComponyController().insert_company(param)
+
+@urls_blueprint.route('/update_company', methods=['POST'])
+def update_company():
+    param = {
+        'form':request.json['Company'],
+        # 'auth':request.headers['Authorization'],
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        # 'token':request.headers['Token']
+    }
+    
+    return ComponyController().update_company(param)
+
+@urls_blueprint.route('/delete_company', methods=['POST'])
+def delete_company():
+    param = {
+        'form':request.json['Company'],
+        # 'auth':request.headers['Authorization'],
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        # 'token':request.headers['Token']
+    }
+    
+    return ComponyController().delete_company(param)
+# ======================end router Company ============================
+
+# ======================router Transaction ============================
+@urls_blueprint.route('/get_transaction', methods=['POST'])
+def get_transaction():
+    param = {
+        'form':request.json['Transaction'],
+        # 'auth':request.headers['Authorization'],
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        # 'token':request.headers['Token']
+    }
+    
+    return TransactionController().get_transaction(param)
+
+@urls_blueprint.route('/insert_transaction', methods=['POST'])
+def insert_transaction():
+    param = {
+        'form':request.json['Transaction'],
+        # 'auth':request.headers['Authorization'],
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        # 'token':request.headers['Token']
+    }
+    
+    return TransactionController().insert_transaction(param)
+
+@urls_blueprint.route('/update_transaction', methods=['POST'])
+def update_transaction():
+    param = {
+        'form':request.json['Transaction'],
+        # 'auth':request.headers['Authorization'],
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        # 'token':request.headers['Token']
+    }
+    
+    return TransactionController().update_transaction(param)
+
+@urls_blueprint.route('/delete_transaction', methods=['POST'])
+def delete_transaction():
+    param = {
+        'form':request.json['Transaction'],
+        # 'auth':request.headers['Authorization'],
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        # 'token':request.headers['Token']
+    }
+    
+    return TransactionController().delete_transaction(param)
+# ======================end router Transaction ============================

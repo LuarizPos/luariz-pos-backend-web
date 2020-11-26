@@ -21,6 +21,7 @@ pybase64 = "*"
 psycopg2 = "*"
 Pillow = "*"
 jinja2 = "*"
+numpy = "*"
 
 [requires]
 python_version = "3.8"
