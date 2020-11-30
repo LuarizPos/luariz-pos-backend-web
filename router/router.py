@@ -4,6 +4,7 @@ from app.controller.product_controller import ProductController
 from app.controller.category_controller import CategoryController
 from app.controller.company_controller import ComponyController
 from app.controller.transaction_controller import TransactionController
+from app.controller.authority_controller import AuthorityController
 
 from flask import request
 
@@ -238,3 +239,49 @@ def delete_transaction():
     
     return TransactionController().delete_transaction(param)
 # ======================end router Transaction ============================
+
+# ======================router Authority ============================
+@urls_blueprint.route('/get_authority', methods=['POST'])
+def get_authority():
+    param = {
+        'form':request.json['Transaction'],
+        # 'auth':request.headers['Authorization'],
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        # 'token':request.headers['Token']
+    }
+    
+    return AuthorityController().get_authority(param)
+
+@urls_blueprint.route('/insert_authority', methods=['POST'])
+def insert_authority():
+    param = {
+        'form':request.json['Transaction'],
+        # 'auth':request.headers['Authorization'],
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        # 'token':request.headers['Token']
+    }
+    
+    return AuthorityController().insert_authority(param)
+
+@urls_blueprint.route('/update_authority', methods=['POST'])
+def update_authority():
+    param = {
+        'form':request.json['Transaction'],
+        # 'auth':request.headers['Authorization'],
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        # 'token':request.headers['Token']
+    }
+    
+    return AuthorityController().update_authority(param)
+
+@urls_blueprint.route('/delete_authority', methods=['POST'])
+def delete_authority():
+    param = {
+        'form':request.json['Transaction'],
+        # 'auth':request.headers['Authorization'],
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        # 'token':request.headers['Token']
+    }
+    
+    return AuthorityController().delete_authority(param)
+# ======================end router Authority ============================
