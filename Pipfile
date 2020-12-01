@@ -22,6 +22,7 @@ psycopg2 = "*"
 Pillow = "*"
 jinja2 = "*"
 numpy = "*"
+flask-cors = "*"
 
 [requires]
 python_version = "3.8"
