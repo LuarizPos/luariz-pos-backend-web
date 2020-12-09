@@ -9,7 +9,7 @@ web_blueprint = Blueprint('web', __name__, url_prefix='/')
 def hello_word():
     return "WELCOME TO API LUARIZPOS V1"
 
-@web_blueprint.route('/display/<filename>',methods=['GET'])
+@web_blueprint.route('/desplay/<filename>',methods=['GET'])
 def display_image(filename):
     imageFilename = os.path.join(app.config['IMAGE_FOLDER'], filename)
     return render_template("index.html", images = imageFilename)

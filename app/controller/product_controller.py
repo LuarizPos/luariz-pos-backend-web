@@ -12,6 +12,7 @@ import os
 product_schema = ProductSchema()
 products_schema = ProductSchema(many=True)
 UPLOAD_FOLDER = 'assets/images/'
+display = 'assets/images/'
 
 class ProductController(Resource):
     def get_product(self,param):
@@ -29,7 +30,7 @@ class ProductController(Resource):
                             data_product = products_schema.dump(Product)
                             for product_value in data_product:
                                 data = {
-                                    "image": request.url_root+"display/"+product_value['image'],
+                                    "image": request.url_root+display+product_value['image'],
                                     "id": product_value['id'],
                                     "price": product_value['price'],
                                     "stock": product_value['stock'],
@@ -42,7 +43,7 @@ class ProductController(Resource):
                             Product = ProductModels.query.filter_by(id=id_product).first()
                             data_product = product_schema.dump(Product)
                             data = {
-                                "image": request.url_root+"display/"+data_product['image'],
+                                "image": request.url_root+display+data_product['image'],
                                 "id": data_product['id'],
                                 "price": data_product['price'],
                                 "stock": data_product['stock'],
@@ -135,7 +136,7 @@ class ProductController(Resource):
                                 "name" : name_product,
                                 "category_id" : id_category,
                                 "description" : description,
-                                "image" : request.url_root+"display/"+image,
+                                "image" : request.url_root+display+image,
                                 "stock" : stock,
                                 "price" : price,
                             }
