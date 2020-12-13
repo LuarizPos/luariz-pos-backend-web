@@ -1,4 +1,5 @@
 from app.models.product_models import ProductModels, ProductSchema
+from app.models.category_models import CategoryModels, CategorySchema
 from flask_restful import Resource
 from flask import request, jsonify
 from app.helpers.helpers import Helpers
@@ -6,11 +7,14 @@ from app.helpers.response import ResponseApi
 from app.manage import db, app
 from PIL import Image
 import io
+import pdb
 import os
-
+ 
 
 product_schema = ProductSchema()
 products_schema = ProductSchema(many=True)
+category_schema = CategorySchema()
+categorys_schema = CategorySchema(many=True)
 UPLOAD_FOLDER = 'assets/images/'
 display = 'assets/images/'
 
@@ -25,10 +29,16 @@ class ProductController(Resource):
                     try:
                         showAll = form_req['ShowAll']
                         id_product = form_req['id_product']
+                        count_product = ProductModels.query.count()
+                        # print(count_product)
+                        # pdb.run('mymodule.test()')
                         if showAll:
                             Product = ProductModels.query.all()
                             data_product = products_schema.dump(Product)
                             for product_value in data_product:
+                                id_category = int(product_value['category_id'])
+                                Category = CategoryModels.query.filter_by(id=id_category).first()
+                                data_category = category_schema.dump(Category)
                                 data = {
                                     "image": request.url_root+display+product_value['image'],
                                     "id": product_value['id'],
@@ -36,12 +46,17 @@ class ProductController(Resource):
                                     "stock": product_value['stock'],
                                     "description": product_value['description'],
                                     "category_id": product_value['category_id'],
+                                    "category_name": data_category['name'],
                                     "name": product_value['name'],
+                                    'total_product' : count_product
                                 }
                                 resultData.append(data)
                         else:
                             Product = ProductModels.query.filter_by(id=id_product).first()
                             data_product = product_schema.dump(Product)
+                            id_category = int(data_product['category_id'])
+                            Category = CategoryModels.query.filter_by(id=id_category).first()
+                            data_category = category_schema.dump(Category)
                             data = {
                                 "image": request.url_root+display+data_product['image'],
                                 "id": data_product['id'],
@@ -49,7 +64,9 @@ class ProductController(Resource):
                                 "stock": data_product['stock'],
                                 "description": data_product['description'],
                                 "category_id": data_product['category_id'],
+                                "category_name": data_category['name'],
                                 "name": data_product['name'],
+                                'total_product' : count_product
                             }
                             resultData.append(data)
                         
