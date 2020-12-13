@@ -29,9 +29,6 @@ class ProductController(Resource):
                     try:
                         showAll = form_req['ShowAll']
                         id_product = form_req['id_product']
-                        count_product = ProductModels.query.count()
-                        # print(count_product)
-                        # pdb.run('mymodule.test()')
                         if showAll:
                             Product = ProductModels.query.all()
                             data_product = products_schema.dump(Product)
@@ -48,7 +45,6 @@ class ProductController(Resource):
                                     "category_id": product_value['category_id'],
                                     "category_name": data_category['name'],
                                     "name": product_value['name'],
-                                    'total_product' : count_product
                                 }
                                 resultData.append(data)
                         else:
@@ -66,7 +62,6 @@ class ProductController(Resource):
                                 "category_id": data_product['category_id'],
                                 "category_name": data_category['name'],
                                 "name": data_product['name'],
-                                'total_product' : count_product
                             }
                             resultData.append(data)
                         
