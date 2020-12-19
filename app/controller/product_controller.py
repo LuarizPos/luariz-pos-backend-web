@@ -144,13 +144,16 @@ class ProductController(Resource):
                             new_product = ProductModels(id_category, name_product, description, image, stock, price)
                             db.session.add(new_product)
                             db.session.commit()
+                            Product = ProductModels.query.filter_by(name=name_product).first()
+                            data_product = product_schema.dump(Product)
                             data = {
-                                "name" : name_product,
-                                "category_id" : id_category,
-                                "description" : description,
+                                "id": data_product['id'],
+                                "name" : data_product['name'],
+                                "category_id" : data_product['category_id'],
+                                "description" : data_product['description'],
                                 "image" : request.url_root+display+image,
-                                "stock" : stock,
-                                "price" : price,
+                                "stock" : data_product['stock'],
+                                "price" : data_product['price'],
                             }
                             
                             resultData.append(data)
