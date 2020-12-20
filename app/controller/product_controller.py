@@ -30,8 +30,10 @@ class ProductController(Resource):
                         showAll = form_req['ShowAll']
                         id_product = form_req['id_product']
                         if showAll:
-                            Product = ProductModels.query.all()
+                            Product = ProductModels.query.order_by(ProductModels.id.asc())
                             data_product = products_schema.dump(Product)
+                            # print(data_product)
+                            # pdb.run('mymodule.test()')
                             for product_value in data_product:
                                 id_category = int(product_value['category_id'])
                                 Category = CategoryModels.query.filter_by(id=id_category).first()
