@@ -30,9 +30,9 @@ class CategoryController(Resource):
                             data_category = categorys_schema.dump(Category)
                             for category_value in data_category:
                                 id_category = int(category_value['id'])
-                                total_product = ProductModels.query.filter_by(category_id=id_category).count()
+                                total_product = ProductModels.query.filter_by(id_category=id_category).count()
                                 data = {
-                                    "id": category_value['id'],
+                                    "id_category": category_value['id'],
                                     "name": category_value['name'],
                                     'total_product':total_product
                                 }
@@ -41,9 +41,9 @@ class CategoryController(Resource):
                             Category = CategoryModels.query.filter_by(id=id_category).first()
                             data_category = category_schema.dump(Category)
                             id_category = int(data_category['id'])
-                            total_product = ProductModels.query.filter_by(category_id=id_category).count()
+                            total_product = ProductModels.query.filter_by(id_category=id_category).count()
                             data = {
-                                "id": data_category['id'],
+                                "id_category": data_category['id'],
                                 "name": data_category['name'],
                                 'total_product':total_product
                             }
@@ -212,13 +212,13 @@ class CategoryController(Resource):
                 if form_req:
                     try:
                         for form_value in form_req:
-                            id_category = form_value['id']
+                            id_category = form_value['id_category']
                             category = CategoryModels.query.filter_by(id=id_category).first()
                             category_value = category_schema.dump(category)
                             db.session.delete(category)
                             db.session.commit()
                             data = {
-                                'id':category_value['id'],
+                                'id_category':category_value['id'],
                                 "name" : category_value['name'],
                             }
                             resultData.append(data)

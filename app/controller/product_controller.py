@@ -35,24 +35,26 @@ class ProductController(Resource):
                             # print(data_product)
                             # pdb.run('mymodule.test()')
                             for product_value in data_product:
-                                id_category = int(product_value['category_id'])
+                                id_category = int(product_value['id_category'])
                                 Category = CategoryModels.query.filter_by(id=id_category).first()
                                 data_category = category_schema.dump(Category)
+                                # print(data_category)
+                                # pdb.run('mymodule.test()')
                                 data = {
                                     "image": request.url_root+display+product_value['image'],
                                     "id": product_value['id'],
                                     "price": product_value['price'],
                                     "stock": product_value['stock'],
                                     "description": product_value['description'],
-                                    "category_id": product_value['category_id'],
-                                    "category_name": data_category['name'],
+                                    "id_category": product_value['id_category'],
+                                    # "category_name": data_category['name'],
                                     "name": product_value['name'],
                                 }
                                 resultData.append(data)
                         else:
                             Product = ProductModels.query.filter_by(id=id_product).first()
                             data_product = product_schema.dump(Product)
-                            id_category = int(data_product['category_id'])
+                            id_category = int(data_product['id_category'])
                             Category = CategoryModels.query.filter_by(id=id_category).first()
                             data_category = category_schema.dump(Category)
                             data = {
@@ -61,8 +63,8 @@ class ProductController(Resource):
                                 "price": data_product['price'],
                                 "stock": data_product['stock'],
                                 "description": data_product['description'],
-                                "category_id": data_product['category_id'],
-                                "category_name": data_category['name'],
+                                "id_category": data_product['id_category'],
+                                # "category_name": data_category['name'],
                                 "name": data_product['name'],
                             }
                             resultData.append(data)
@@ -133,6 +135,8 @@ class ProductController(Resource):
                                         image_file = Image.open(io.BytesIO(image_decode))
                                         image_file = image_file.convert('RGB')
                                         image_file.save(image_path)
+                                        # print(data_product)
+                                        # pdb.run('mymodule.test()')
                                     else:
                                         result = {
                                             "code" : 400,
@@ -151,7 +155,7 @@ class ProductController(Resource):
                             data = {
                                 "id": data_product['id'],
                                 "name" : data_product['name'],
-                                "category_id" : data_product['category_id'],
+                                "id_category" : data_product['id_category'],
                                 "description" : data_product['description'],
                                 "image" : request.url_root+display+image,
                                 "stock" : data_product['stock'],
@@ -245,7 +249,7 @@ class ProductController(Resource):
                             data = {
                                 "id" : id_product,
                                 "name" : name_product,
-                                "category_id" : id_category,
+                                "id_category" : id_category,
                                 "description" : description,
                                 "image" : image,
                                 "stock" : stock,
@@ -303,13 +307,13 @@ class ProductController(Resource):
                 if form_req:
                     try:
                         for form_value in form_req:
-                            id_product = form_value['id']
+                            id_product = form_value['id_product']
                             product = ProductModels.query.filter_by(id=id_product).first()
                             product_value = product_schema.dump(product)
                             db.session.delete(product)
                             db.session.commit()
                             data = {
-                                'id':product_value['id'],
+                                'id_product':product_value['id'],
                                 "name" : product_value['name'],
                             }
                             resultData.append(data)
