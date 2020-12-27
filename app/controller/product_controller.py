@@ -35,39 +35,41 @@ class ProductController(Resource):
                             # print(data_product)
                             # pdb.run('mymodule.test()')
                             for product_value in data_product:
-                                id_category = int(product_value['id_category'])
-                                Category = CategoryModels.query.filter_by(id=id_category).first()
-                                data_category = category_schema.dump(Category)
-                                # print(data_category)
-                                # pdb.run('mymodule.test()')
-                                data = {
-                                    "image": request.url_root+display+product_value['image'],
-                                    "id": product_value['id'],
-                                    "price": product_value['price'],
-                                    "stock": product_value['stock'],
-                                    "description": product_value['description'],
-                                    "id_category": product_value['id_category'],
-                                    # "category_name": data_category['name'],
-                                    "name": product_value['name'],
-                                }
-                                resultData.append(data)
+                                if(product_value):
+                                    id_category = (product_value['id_category'])
+                                    Category = CategoryModels.query.filter_by(id=id_category).first()
+                                    data_category = category_schema.dump(Category)
+                                    data = {
+                                        "image": request.url_root+display+product_value['image'],
+                                        "id": product_value['id'],
+                                        "price": product_value['price'],
+                                        "stock": product_value['stock'],
+                                        "description": product_value['description'],
+                                        "id_category": product_value['id_category'],
+                                        "category_name": data_category.get('name'),
+                                        "name": product_value['name'],
+                                    }
+                                    resultData.append(data)
                         else:
                             Product = ProductModels.query.filter_by(id=id_product).first()
                             data_product = product_schema.dump(Product)
-                            id_category = int(data_product['id_category'])
-                            Category = CategoryModels.query.filter_by(id=id_category).first()
-                            data_category = category_schema.dump(Category)
-                            data = {
-                                "image": request.url_root+display+data_product['image'],
-                                "id": data_product['id'],
-                                "price": data_product['price'],
-                                "stock": data_product['stock'],
-                                "description": data_product['description'],
-                                "id_category": data_product['id_category'],
-                                # "category_name": data_category['name'],
-                                "name": data_product['name'],
-                            }
-                            resultData.append(data)
+                            # print(data_product)
+                            # pdb.run('mymodule.test()')
+                            if(data_product):
+                                id_category = int(data_product['id_category'])
+                                Category = CategoryModels.query.filter_by(id=id_category).first()
+                                data_category = category_schema.dump(Category)
+                                data = {
+                                    "image": request.url_root+display+data_product['image'],
+                                    "id": data_product['id'],
+                                    "price": data_product['price'],
+                                    "stock": data_product['stock'],
+                                    "description": data_product['description'],
+                                    "id_category": data_product['id_category'],
+                                    "category_name": data_category.get('name'),
+                                    "name": data_product['name'],
+                                }
+                                resultData.append(data)
                         
 
                         result = {
@@ -77,11 +79,11 @@ class ProductController(Resource):
                             "result": resultData
                         }
                     except Exception as e:
-                        error  = str(e)
+                        # error  = str(e)
                         result = {
                             "code" : 400,
                             "endpoint": "Get Product",
-                            "message": error,
+                            "message": "Failed Get Data",
                             "result": {}
                         }
                 else:

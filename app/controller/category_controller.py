@@ -56,11 +56,11 @@ class CategoryController(Resource):
                             "result": resultData
                         }
                     except Exception as e:
-                        error  = str(e)
+                        # error  = str(e)
                         result = {
                             "code" : 400,
                             "endpoint": "Get Category",
-                            "message": error,
+                            "message": "Failed Get Data",
                             "result": {}
                         }
                 else:
