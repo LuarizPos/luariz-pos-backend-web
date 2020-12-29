@@ -100,7 +100,10 @@ class CategoryController(Resource):
                             new_category = CategoryModels(name_category)
                             db.session.add(new_category)
                             db.session.commit()
+                            Category = CategoryModels.query.filter_by(name=name_category).first()
+                            data_category = category_schema.dump(Category)
                             data = {
+                                "id_category" : data_category['id'],
                                 "name" : name_category,
                             }
                             resultData.append(data)
