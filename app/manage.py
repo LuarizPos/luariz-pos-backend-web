@@ -2,10 +2,18 @@ from flask import Flask, request, jsonify
 from flask_marshmallow import Marshmallow 
 from flask_migrate import Migrate, MigrateCommand
 from flask_sqlalchemy import SQLAlchemy
+import cloudinary
+
 # from dotenv import load_dotenv
 import os
 
 # load_dotenv()
+cloudinary.config( 
+  cloud_name = os.getenv('CLOUD_NAME'),
+  api_key = os.getenv('API_KEY'),
+  api_secret = os.getenv('API_SECRET'),
+)
+
 picFolder = os.path.join('../assets','images')
 DB_DATABASE = os.getenv('DB_DATABASE')
 DB_USERNAME = os.getenv('DB_USERNAME')

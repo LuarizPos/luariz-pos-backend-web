@@ -5,6 +5,10 @@ from flask import request, jsonify
 from app.helpers.helpers import Helpers
 from app.helpers.response import ResponseApi
 from app.manage import db, app
+from cloudinary.uploader import upload
+import cloudinary.api
+
+
 from PIL import Image
 import io
 import pdb
@@ -39,14 +43,15 @@ class ProductController(Resource):
                                     id_category = (product_value['id_category'])
                                     Category = CategoryModels.query.filter_by(id=id_category).first()
                                     data_category = category_schema.dump(Category)
+                                    get_image_cloudinary = cloudinary.api.resources_by_ids([product_value['id_cloudinary']])
                                     data = {
-                                        "image": request.url_root+display+product_value['image'],
                                         "id": product_value['id'],
                                         "price": product_value['price'],
                                         "stock": product_value['stock'],
                                         "description": product_value['description'],
                                         "id_category": product_value['id_category'],
                                         "category_name": data_category.get('name'),
+                                        "image": get_image_cloudinary['resources'][0]['secure_url'],
                                         "name": product_value['name'],
                                     }
                                     resultData.append(data)
@@ -59,14 +64,15 @@ class ProductController(Resource):
                                 id_category = int(data_product['id_category'])
                                 Category = CategoryModels.query.filter_by(id=id_category).first()
                                 data_category = category_schema.dump(Category)
+                                get_image_cloudinary = cloudinary.api.resources_by_ids([data_product['id_cloudinary']])
                                 data = {
-                                    "image": request.url_root+display+data_product['image'],
                                     "id": data_product['id'],
                                     "price": data_product['price'],
                                     "stock": data_product['stock'],
                                     "description": data_product['description'],
                                     "id_category": data_product['id_category'],
                                     "category_name": data_category.get('name'),
+                                    "image": get_image_cloudinary['resources'][0]['secure_url'],
                                     "name": data_product['name'],
                                 }
                                 resultData.append(data)
@@ -137,7 +143,10 @@ class ProductController(Resource):
                                         image_file = Image.open(io.BytesIO(image_decode))
                                         image_file = image_file.convert('RGB')
                                         image_file.save(image_path)
-                                        # print(data_product)
+                                        upload_cloudinary = upload(image_path, 
+                                            folder = "assets/images/", 
+                                            public_id = image_name+'.'+image_type)
+                                        # print(upload_cloudinary['public_id'])
                                         # pdb.run('mymodule.test()')
                                     else:
                                         result = {
@@ -149,17 +158,18 @@ class ProductController(Resource):
                                         response = ResponseApi().response_api(result)
                                         return response
                             
-                            new_product = ProductModels(id_category, name_product, description, image, stock, price)
+                            new_product = ProductModels(id_category, name_product, description, image, upload_cloudinary['public_id'], stock, price)
                             db.session.add(new_product)
                             db.session.commit()
                             Product = ProductModels.query.filter_by(name=name_product).first()
                             data_product = product_schema.dump(Product)
+                            get_image_cloudinary = cloudinary.api.resources_by_ids([data_product['id_cloudinary']])
                             data = {
                                 "id": data_product['id'],
                                 "name" : data_product['name'],
                                 "id_category" : data_product['id_category'],
                                 "description" : data_product['description'],
-                                "image" : request.url_root+display+image,
+                                "image" : get_image_cloudinary['resources'][0]['secure_url'],
                                 "stock" : data_product['stock'],
                                 "price" : data_product['price'],
                             }

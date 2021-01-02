@@ -23,6 +23,7 @@ Pillow = "*"
 jinja2 = "*"
 numpy = "*"
 flask-cors = "*"
+cloudinary = "*"
 
 [requires]
 python_version = "3.8"
