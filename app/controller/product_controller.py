@@ -220,8 +220,9 @@ class ProductController(Resource):
             # if cek_session['code'] == 200:
                 form_req = param['form']
                 resultData = []
+                image = ""
                 if form_req:
-                    # try:
+                    try:
                         for form_value in form_req:
                             id_product = form_value['id_product']
                             name_product = form_value['name']
@@ -229,12 +230,15 @@ class ProductController(Resource):
                             description = form_value['description']
                             price = form_value['price']
                             stock = form_value['stock']
-                            image = ""
+
+                            Product = ProductModels.query.filter_by(id=id_product)
+                            ge_product = ProductModels.query.filter_by(id=id_product).first()
+                            data_product = product_schema.dump(ge_product)
+                            id_cloudinary = data_product['id_cloudinary']
                             if form_value['image']:
                                 image_encode = form_value['image']['image_blob'] 
                                 image_name = form_value['image']['name']
                                 image_type = form_value['image']['type']
-                                image = image_name+"."+image_type
                                 if image_encode != "" and image_name != "" and image_type != "":
                                     image_path = UPLOAD_FOLDER+image_name+'.'+image_type
                                     image_decode = Helpers().decode_image(image_encode)
@@ -242,6 +246,13 @@ class ProductController(Resource):
                                         image_file = Image.open(io.BytesIO(image_decode))
                                         image_file = image_file.convert('RGB')
                                         image_file.save(image_path)
+                                        cloudinary.api.delete_resources([data_product['id_cloudinary']])
+                                        upload_cloudinary = upload(image_path, 
+                                            folder = "assets/images/", 
+                                            public_id = image_name+'.'+image_type)
+                                        id_cloudinary = upload_cloudinary['public_id']
+                                        # print(upload_cloudinary)
+                                        # pdb.run('mymodule.test()')
                                     else:
                                         result = {
                                             "code" : 400,
@@ -252,39 +263,47 @@ class ProductController(Resource):
                                         response = ResponseApi().response_api(result)
                                         return response
                             
-                            Product = ProductModels.query.filter_by(id=id_product)
-                            ge_product = ProductModels.query.filter_by(id=id_product).first()
-                            data_product = product_schema.dump(ge_product)
-                            if image == "":
-                                image = data_product["image"]
-                            
-                            data = {
+                            get_image_cloudinary = cloudinary.api.resources_by_ids([id_cloudinary])
+                            image = get_image_cloudinary['resources'][0]['secure_url'],
+                            datas = {
                                 "id" : id_product,
                                 "name" : name_product,
                                 "id_category" : id_category,
                                 "description" : description,
                                 "image" : image,
+                                'id_cloudinary': id_cloudinary,
                                 "stock" : stock,
                                 "price" : price,
                             }
-                            Product.update(data)
+                            Product.update(datas)
                             db.session.commit()
-                            resultData.append(data)
                         
+                        Product = ProductModels.query.filter_by(id=id_product).first()
+                        data_product = product_schema.dump(Product)
+                        data = {
+                            "id": data_product['id'],
+                            "price": data_product['price'],
+                            "stock": data_product['stock'],
+                            "description": data_product['description'],
+                            "id_category": data_product['id_category'],
+                            "image": image,
+                            "name": data_product['name'],
+                        }
+                        resultData.append(data)
                         result = {
                             "code" : 200,
                             "endpoint": "Update Product",
                             "message": "Update Product Succes",
                             "result": resultData
                         }
-                    # except Exception as e:
-                    #     error  = str(e)
-                    #     result = {
-                    #         "code" : 400,
-                    #         "endpoint": "Update Product",
-                    #         "message": error,
-                    #         "result": {}
-                    #     }
+                    except Exception as e:
+                        error  = str(e)
+                        result = {
+                            "code" : 400,
+                            "endpoint": "Update Product",
+                            "message": error,
+                            "result": {}
+                        }
                 else:
                     result = {
                         "code" : 400,
@@ -322,6 +341,7 @@ class ProductController(Resource):
                             id_product = form_value['id_product']
                             product = ProductModels.query.filter_by(id=id_product).first()
                             product_value = product_schema.dump(product)
+                            cloudinary.api.delete_resources([product_value['id_cloudinary']])
                             db.session.delete(product)
                             db.session.commit()
                             data = {
