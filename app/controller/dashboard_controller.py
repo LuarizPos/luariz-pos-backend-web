@@ -52,7 +52,7 @@ class DashboardController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
-            #         "SpeedTime" : start_time,
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Get Category",
             #         "message": cek_session['message'],
             #         "result": {}
