@@ -5,10 +5,21 @@ from app.controller.category_controller import CategoryController
 from app.controller.company_controller import ComponyController
 from app.controller.transaction_controller import TransactionController
 from app.controller.authority_controller import AuthorityController
+from app.controller.dashboard_controller import DashboardController
 
 from flask import request
 
 urls_blueprint = Blueprint('urls', __name__, url_prefix='/v1')
+
+# ======================router user ============================
+@urls_blueprint.route('/dashboard', methods=['GET'])
+def get_dashboard():
+    param = {
+        # 'auth':request.headers['Authorization'],
+        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        # 'token':request.headers['Token']
+    }
+    return DashboardController().get_dashboard(param)
 
 # ======================router user ============================
 @urls_blueprint.route('/get_user', methods=['POST'])

@@ -15,6 +15,7 @@ users_schema = UsersSchema(many=True)
 
 class UsersController(Resource):
     def get_user(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -28,6 +29,7 @@ class UsersController(Resource):
                         user_response = user_schema.dump(user)
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Get Users",
                             "message": "Succes Get Users",
                             "result": {
@@ -43,6 +45,7 @@ class UsersController(Resource):
                     else:
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Get Users",
                             "message": "Your account email not found",
                             "result": {}
@@ -50,6 +53,7 @@ class UsersController(Resource):
                  else:
                     result = {
                             "code" : validation['code'],
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Get Users",
                             "message": validation['message'],
                             "result": {}
@@ -58,6 +62,7 @@ class UsersController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Get Users",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -66,6 +71,7 @@ class UsersController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Get Users",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}
@@ -80,6 +86,7 @@ class UsersController(Resource):
         return Helpers().decode_token(param)
 
     def register_user(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             form_req = param['form']
             if form_req:
@@ -92,6 +99,7 @@ class UsersController(Resource):
                         db.session.commit()
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Register",
                             "message": "Register Succes",
                             "result": {
@@ -102,6 +110,7 @@ class UsersController(Resource):
                     else:
                         result = {
                             "code" : validation['code'],
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Register",
                             "message": validation['message'],
                             "result": {}
@@ -110,6 +119,7 @@ class UsersController(Resource):
                     error  = str(e)
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Register",
                         "message": error,
                         "result": {}
@@ -117,6 +127,7 @@ class UsersController(Resource):
             else:
                 result = {
                     "code" : 400,
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
                     "endpoint": "Register",
                     "message": "Form Request Is Empty",
                     "result": {}
@@ -124,6 +135,7 @@ class UsersController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Register",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}
@@ -133,6 +145,7 @@ class UsersController(Resource):
         return jsonify(response)
 
     def login_user(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             form_req = param['form']
             
@@ -163,6 +176,7 @@ class UsersController(Resource):
                                 if update_session:
                                     result = {
                                         "code" : 200,
+                                        "SpeedTime" : ResponseApi().speed_response(start_time),
                                         "message": "Succes Login",
                                         "endpoint": "Login",
                                         "result": {
@@ -177,6 +191,7 @@ class UsersController(Resource):
                                 else:    
                                     result = {
                                         "code" : 400,
+                                        "SpeedTime" : ResponseApi().speed_response(start_time),
                                         "endpoint": "Login",
                                         "message": "Failed Session",
                                         "result": {}
@@ -184,6 +199,7 @@ class UsersController(Resource):
                             else:
                                 result = {
                                     "code" : 400,
+                                    "SpeedTime" : ResponseApi().speed_response(start_time),
                                     "endpoint": "Login",
                                     "message": "Your account email or password is incorrect",
                                     "result": {}
@@ -191,6 +207,7 @@ class UsersController(Resource):
                         else:
                             result = {
                                 "code" : 400,
+                                "SpeedTime" : ResponseApi().speed_response(start_time),
                                 "endpoint": "Login",
                                 "message": "Your account email or password is incorrect",
                                 "result": {}
@@ -198,6 +215,7 @@ class UsersController(Resource):
                     else:
                         result = {
                             "code" : validation['code'],
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Login",
                             "message": validation['message'],
                             "result": {}
@@ -207,6 +225,7 @@ class UsersController(Resource):
                     error  = str(e)
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Login",
                         "message": error,
                         "result": {}
@@ -215,6 +234,7 @@ class UsersController(Resource):
             else:
                 result = {
                     "code" : 400,
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
                     "endpoint": "Login",
                     "message": "Form Request Is Empty",
                     "result": {}
@@ -223,6 +243,7 @@ class UsersController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Login",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}

@@ -24,6 +24,7 @@ display = 'assets/images/'
 
 class ProductController(Resource):
     def get_product(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -80,6 +81,7 @@ class ProductController(Resource):
 
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Get Product",
                             "message": "Get Product Succes",
                             "result": resultData
@@ -88,6 +90,7 @@ class ProductController(Resource):
                         # error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Get Product",
                             "message": "Failed Get Data",
                             "result": {}
@@ -95,6 +98,7 @@ class ProductController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Get Product",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -102,6 +106,7 @@ class ProductController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Get Product",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -109,6 +114,7 @@ class ProductController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Get Product",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}
@@ -117,6 +123,7 @@ class ProductController(Resource):
         return response
     
     def insert_product(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -151,6 +158,7 @@ class ProductController(Resource):
                                     else:
                                         result = {
                                             "code" : 400,
+                                            "SpeedTime" : ResponseApi().speed_response(start_time),
                                             "endpoint": "Insert Product",
                                             "message": "image_blob is wrong",
                                             "result": {}
@@ -177,6 +185,7 @@ class ProductController(Resource):
                             resultData.append(data)
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Insert Product",
                             "message": "Insert Product Succes",
                             "result": resultData
@@ -185,6 +194,7 @@ class ProductController(Resource):
                         error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Insert Product",
                             "message": error,
                             "result": {}
@@ -192,6 +202,7 @@ class ProductController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Insert Product",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -199,6 +210,7 @@ class ProductController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Insert Product",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -206,6 +218,7 @@ class ProductController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Insert Product",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}
@@ -215,6 +228,7 @@ class ProductController(Resource):
         return response
             
     def update_product(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -256,6 +270,7 @@ class ProductController(Resource):
                                     else:
                                         result = {
                                             "code" : 400,
+                                            "SpeedTime" : ResponseApi().speed_response(start_time),
                                             "endpoint": "Insert Product",
                                             "message": "image_blob is wrong",
                                             "result": {}
@@ -292,6 +307,7 @@ class ProductController(Resource):
                         resultData.append(data)
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Update Product",
                             "message": "Update Product Succes",
                             "result": resultData
@@ -300,6 +316,7 @@ class ProductController(Resource):
                         error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Update Product",
                             "message": error,
                             "result": {}
@@ -307,6 +324,7 @@ class ProductController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Update Product",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -314,6 +332,7 @@ class ProductController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Update Product",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -321,6 +340,7 @@ class ProductController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Update Product",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}
@@ -330,6 +350,7 @@ class ProductController(Resource):
         return response
 
     def delete_product(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -351,6 +372,7 @@ class ProductController(Resource):
                             resultData.append(data)
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Delete Product",
                             "message": "Delete Product Succes",
                             "result": resultData
@@ -360,6 +382,7 @@ class ProductController(Resource):
                         error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Delete Product",
                             "message": error,
                             "result": {}
@@ -367,6 +390,7 @@ class ProductController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Delete Product",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -374,6 +398,7 @@ class ProductController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Update Product",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -381,6 +406,7 @@ class ProductController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Delete Product",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}

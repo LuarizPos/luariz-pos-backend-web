@@ -16,6 +16,7 @@ products_schema = ProductSchema(many=True)
 
 class CategoryController(Resource):
     def get_category(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -51,6 +52,7 @@ class CategoryController(Resource):
                         
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Get Category",
                             "message": "Get Category Succes",
                             "result": resultData
@@ -59,6 +61,7 @@ class CategoryController(Resource):
                         # error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Get Category",
                             "message": "Failed Get Data",
                             "result": {}
@@ -66,6 +69,7 @@ class CategoryController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Get Category",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -73,6 +77,7 @@ class CategoryController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Get Category",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -80,6 +85,7 @@ class CategoryController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Get Category",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}
@@ -88,6 +94,7 @@ class CategoryController(Resource):
         return response
     
     def insert_category(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -110,6 +117,7 @@ class CategoryController(Resource):
                         
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Insert Category",
                             "message": "Insert Category Succes",
                             "result": resultData
@@ -118,6 +126,7 @@ class CategoryController(Resource):
                         error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Insert Category",
                             "message": error,
                             "result": {}
@@ -125,6 +134,7 @@ class CategoryController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Insert Category",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -132,6 +142,7 @@ class CategoryController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Insert Category",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -139,6 +150,7 @@ class CategoryController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Insert Category",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}
@@ -148,6 +160,7 @@ class CategoryController(Resource):
         return response
             
     def update_category(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -169,6 +182,7 @@ class CategoryController(Resource):
                         
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Update Category",
                             "message": "Update Category Succes",
                             "result": resultData
@@ -177,6 +191,7 @@ class CategoryController(Resource):
                         error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Update Category",
                             "message": error,
                             "result": {}
@@ -184,6 +199,7 @@ class CategoryController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Update Category",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -191,6 +207,7 @@ class CategoryController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Update Category",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -198,6 +215,7 @@ class CategoryController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Update Category",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}
@@ -207,6 +225,7 @@ class CategoryController(Resource):
         return response
     
     def delete_category(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -227,6 +246,7 @@ class CategoryController(Resource):
                             resultData.append(data)
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Delete Category",
                             "message": "Delete Category Succes",
                             "result": resultData
@@ -236,6 +256,7 @@ class CategoryController(Resource):
                         error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Delete Category",
                             "message": error,
                             "result": {}
@@ -243,6 +264,7 @@ class CategoryController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Delete Category",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -250,6 +272,7 @@ class CategoryController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Update Category",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -257,6 +280,7 @@ class CategoryController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Delete Category",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}

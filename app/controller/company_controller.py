@@ -12,6 +12,7 @@ companys_schema = CompanySchema(many=True)
 
 class ComponyController(Resource):
     def get_company(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -29,6 +30,7 @@ class ComponyController(Resource):
                         
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Get Company",
                             "message": "Get Company Succes",
                             "result": data
@@ -37,6 +39,7 @@ class ComponyController(Resource):
                         error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Get Company",
                             "message": error,
                             "result": {}
@@ -44,6 +47,7 @@ class ComponyController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Get Company",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -51,6 +55,7 @@ class ComponyController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Get Company",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -58,6 +63,7 @@ class ComponyController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Get Company",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}
@@ -67,6 +73,7 @@ class ComponyController(Resource):
         
 
     def insert_company(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -98,6 +105,7 @@ class ComponyController(Resource):
                             resultData.append(data)
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Insert Company",
                             "message": "Insert Company Succes",
                             "result": resultData
@@ -108,6 +116,7 @@ class ComponyController(Resource):
                         error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Insert Company",
                             "message": error,
                             "result": {}
@@ -115,6 +124,7 @@ class ComponyController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Insert Company",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -122,6 +132,7 @@ class ComponyController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Insert Company",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -130,6 +141,7 @@ class ComponyController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Insert Company",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}
@@ -139,6 +151,7 @@ class ComponyController(Resource):
         return response
 
     def update_company(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -170,6 +183,7 @@ class ComponyController(Resource):
                             resultData.append(data)
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Update Company",
                             "message": "Update Company Succes",
                             "result": resultData
@@ -180,6 +194,7 @@ class ComponyController(Resource):
                         error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Update Company",
                             "message": error,
                             "result": {}
@@ -187,6 +202,7 @@ class ComponyController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Update Company",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -194,6 +210,7 @@ class ComponyController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Update Company",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -201,6 +218,7 @@ class ComponyController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Update Company",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}
@@ -209,6 +227,7 @@ class ComponyController(Resource):
         return response
 
     def delete_company(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -235,6 +254,7 @@ class ComponyController(Resource):
                             resultData.append(data)
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Delete Company",
                             "message": "Delete Company Succes",
                             "result": resultData
@@ -244,6 +264,7 @@ class ComponyController(Resource):
                         error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Delete Company",
                             "message": error,
                             "result": {}
@@ -251,6 +272,7 @@ class ComponyController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Delete Company",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -258,6 +280,7 @@ class ComponyController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Update Company",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -266,6 +289,7 @@ class ComponyController(Resource):
             result = {
                 "code" : 400,
                 "endpoint": "Delete Company",
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "message": "Authentication signature calculation is wrong",
                 "result": {}
             }

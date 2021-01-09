@@ -13,6 +13,7 @@ transactions_schema = TransactionSchema(many=True)
 
 class TransactionController(Resource):
     def get_transaction(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -31,6 +32,7 @@ class TransactionController(Resource):
                         
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Get Transaction",
                             "message": "Get Transaction Succes",
                             "result": data
@@ -39,6 +41,7 @@ class TransactionController(Resource):
                         error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Get Transaction",
                             "message": error,
                             "result": {}
@@ -46,6 +49,7 @@ class TransactionController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Get Transaction",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -53,6 +57,7 @@ class TransactionController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Get Transaction",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -60,6 +65,7 @@ class TransactionController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Get Transaction",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}
@@ -68,6 +74,7 @@ class TransactionController(Resource):
         return response
     
     def insert_transaction(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -97,6 +104,7 @@ class TransactionController(Resource):
                         resultData.append(data)
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Insert Transasction",
                             "message": "Insert Transasction Succes",
                             "result": resultData
@@ -108,6 +116,7 @@ class TransactionController(Resource):
                         error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Insert Transasction",
                             "message": error,
                             "result": {}
@@ -115,6 +124,7 @@ class TransactionController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Insert Transasction",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -122,6 +132,7 @@ class TransactionController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Insert Transaction",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -129,6 +140,7 @@ class TransactionController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Insert Transaction",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}
@@ -137,6 +149,7 @@ class TransactionController(Resource):
         return response
         
     def update_transaction(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -167,6 +180,7 @@ class TransactionController(Resource):
                             resultData.append(data)
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Update Transaction",
                             "message": "Update Transaction Succes",
                             "result": resultData
@@ -177,6 +191,7 @@ class TransactionController(Resource):
                         error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Update Transaction",
                             "message": error,
                             "result": {}
@@ -184,6 +199,7 @@ class TransactionController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Update Transaction",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -191,6 +207,7 @@ class TransactionController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Update Transaction",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -198,6 +215,7 @@ class TransactionController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Update Transaction",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}
@@ -206,6 +224,7 @@ class TransactionController(Resource):
         return response
 
     def delete_transaction(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -231,6 +250,7 @@ class TransactionController(Resource):
                             resultData.append(data)
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Delete Transaction",
                             "message": "Delete Transaction Succes",
                             "result": resultData
@@ -239,6 +259,7 @@ class TransactionController(Resource):
                         error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Delete Transaction",
                             "message": error,
                             "result": {}
@@ -246,6 +267,7 @@ class TransactionController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Delete Transaction",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -253,6 +275,7 @@ class TransactionController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Update Transaction",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -260,6 +283,7 @@ class TransactionController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Delete Transaction",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}

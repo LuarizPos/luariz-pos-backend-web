@@ -12,6 +12,7 @@ authoritys_schema = AuthoritySchema(many=True)
 class AuthorityController(Resource):
 
     def get_authority(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -29,6 +30,7 @@ class AuthorityController(Resource):
                         
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Get Authority",
                             "message": "Get Authority Succes",
                             "result": data
@@ -37,6 +39,7 @@ class AuthorityController(Resource):
                         error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Get Authority",
                             "message": error,
                             "result": {}
@@ -44,6 +47,7 @@ class AuthorityController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Get Authority",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -51,6 +55,7 @@ class AuthorityController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Get Authority",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -58,6 +63,7 @@ class AuthorityController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Get Authority",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}
@@ -66,6 +72,7 @@ class AuthorityController(Resource):
         return response
 
     def insert_authority(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -84,6 +91,7 @@ class AuthorityController(Resource):
                             resultData.append(data)
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Insert Authority",
                             "message": "Insert Authority Succes",
                             "result": resultData
@@ -94,6 +102,7 @@ class AuthorityController(Resource):
                         error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Insert Authority",
                             "message": error,
                             "result": {}
@@ -101,6 +110,7 @@ class AuthorityController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Insert Authority",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -108,6 +118,7 @@ class AuthorityController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Insert Authority",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -115,6 +126,7 @@ class AuthorityController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Insert Authority",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}
@@ -124,6 +136,7 @@ class AuthorityController(Resource):
         return response
 
     def update_authority(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -143,6 +156,7 @@ class AuthorityController(Resource):
                             resultData.append(data)
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Update Authority",
                             "message": "Update Authority Succes",
                             "result": resultData
@@ -153,6 +167,7 @@ class AuthorityController(Resource):
                         error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Update Authority",
                             "message": error,
                             "result": {}
@@ -160,6 +175,7 @@ class AuthorityController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Update Authority",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -167,6 +183,7 @@ class AuthorityController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Update Authority",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -174,6 +191,7 @@ class AuthorityController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Update Authority",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}
@@ -182,6 +200,7 @@ class AuthorityController(Resource):
         return response
 
     def delete_authority(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -202,6 +221,7 @@ class AuthorityController(Resource):
                             resultData.append(data)
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Delete Authority",
                             "message": "Delete Authority Succes",
                             "result": resultData
@@ -211,6 +231,7 @@ class AuthorityController(Resource):
                         error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Delete Authority",
                             "message": error,
                             "result": {}
@@ -218,6 +239,7 @@ class AuthorityController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Delete Authority",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -225,6 +247,7 @@ class AuthorityController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Update Authority",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -232,6 +255,7 @@ class AuthorityController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Delete Authority",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}

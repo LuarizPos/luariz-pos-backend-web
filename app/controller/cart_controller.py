@@ -12,6 +12,7 @@ carts_schema = CartSchema(many=True)
 class CartController(Resource):
 
     def get_Cart(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -29,6 +30,7 @@ class CartController(Resource):
                         
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Get Cart",
                             "message": "Get Cart Succes",
                             "result": data
@@ -37,6 +39,7 @@ class CartController(Resource):
                         error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Get Cart",
                             "message": error,
                             "result": {}
@@ -44,6 +47,7 @@ class CartController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Get Cart",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -51,6 +55,7 @@ class CartController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Get Cart",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -58,6 +63,7 @@ class CartController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Get Cart",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}
@@ -66,6 +72,7 @@ class CartController(Resource):
         return response
 
     def insert_cart(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -90,6 +97,7 @@ class CartController(Resource):
                             resultData.append(data)
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Insert Cart",
                             "message": "Insert Cart Succes",
                             "result": resultData
@@ -100,6 +108,7 @@ class CartController(Resource):
                         error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Insert Cart",
                             "message": error,
                             "result": {}
@@ -107,6 +116,7 @@ class CartController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Insert Cart",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -114,6 +124,7 @@ class CartController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Insert Cart",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -122,6 +133,7 @@ class CartController(Resource):
             result = {
                 "code" : 400,
                 "endpoint": "Insert Cart",
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "message": "Authentication signature calculation is wrong",
                 "result": {}
             }
@@ -130,6 +142,7 @@ class CartController(Resource):
         return response
 
     def update_cart(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -155,6 +168,7 @@ class CartController(Resource):
                             resultData.append(data)
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Update Cart",
                             "message": "Update Cart Succes",
                             "result": resultData
@@ -165,6 +179,7 @@ class CartController(Resource):
                         error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Update Cart",
                             "message": error,
                             "result": {}
@@ -172,6 +187,7 @@ class CartController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Update Cart",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -179,6 +195,7 @@ class CartController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Update Cart",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -187,6 +204,7 @@ class CartController(Resource):
             result = {
                 "code" : 400,
                 "endpoint": "Update Cart",
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "message": "Authentication signature calculation is wrong",
                 "result": {}
             }    
@@ -195,6 +213,7 @@ class CartController(Resource):
         
 
     def delete_cart(self,param):
+        start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             # cek_session = Helpers().cek_session(param)
             # if cek_session['code'] == 200:
@@ -218,6 +237,7 @@ class CartController(Resource):
                             resultData.append(data)
                         result = {
                             "code" : 200,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Delete Cart",
                             "message": "Delete Cart Succes",
                             "result": resultData
@@ -226,6 +246,7 @@ class CartController(Resource):
                         error  = str(e)
                         result = {
                             "code" : 400,
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Delete Cart",
                             "message": error,
                             "result": {}
@@ -233,6 +254,7 @@ class CartController(Resource):
                 else:
                     result = {
                         "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
                         "endpoint": "Delete Cart",
                         "message": "Form Request Is Empty",
                         "result": {}
@@ -240,6 +262,7 @@ class CartController(Resource):
             # else:
             #     result = {
             #         "code" : cek_session['code'],
+            #         "SpeedTime" : ResponseApi().speed_response(start_time),
             #         "endpoint": "Update Cart",
             #         "message": cek_session['message'],
             #         "result": {}
@@ -247,6 +270,7 @@ class CartController(Resource):
         else:
             result = {
                 "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
                 "endpoint": "Delete Cart",
                 "message": "Authentication signature calculation is wrong",
                 "result": {}
