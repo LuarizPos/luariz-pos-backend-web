@@ -13,7 +13,7 @@ cloudinary.config(
   api_key = os.getenv('API_KEY'),
   api_secret = os.getenv('API_SECRET'),
 )
-
+UseCloundiary = os.getenv('USE_CLOUDINARY'),
 picFolder = os.path.join('../assets','images')
 DB_DATABASE = os.getenv('DB_DATABASE')
 DB_USERNAME = os.getenv('DB_USERNAME')

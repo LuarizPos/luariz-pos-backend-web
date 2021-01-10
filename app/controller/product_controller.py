@@ -4,11 +4,9 @@ from flask_restful import Resource
 from flask import request, jsonify
 from app.helpers.helpers import Helpers
 from app.helpers.response import ResponseApi
-from app.manage import db, app
+from app.manage import db, UseCloundiary
 from cloudinary.uploader import upload
 import cloudinary.api
-
-
 from PIL import Image
 import io
 import pdb
@@ -32,19 +30,24 @@ class ProductController(Resource):
                 resultData = []
                 if form_req:
                     try:
+                        image = ''
                         showAll = form_req['ShowAll']
                         id_product = form_req['id_product']
                         if showAll:
                             Product = ProductModels.query.order_by(ProductModels.id.asc())
                             data_product = products_schema.dump(Product)
-                            # print(data_product)
-                            # pdb.run('mymodule.test()')
                             for product_value in data_product:
                                 if(product_value):
                                     id_category = (product_value['id_category'])
                                     Category = CategoryModels.query.filter_by(id=id_category).first()
                                     data_category = category_schema.dump(Category)
-                                    get_image_cloudinary = cloudinary.api.resources_by_ids([product_value['id_cloudinary']])
+                                    if UseCloundiary is True:
+                                        # print(UseCloundiary)
+                                        # pdb.run('mymodule.test()')
+                                        get_image_cloudinary = cloudinary.api.resources_by_ids([product_value['id_cloudinary']])
+                                        image = get_image_cloudinary['resources'][0]['secure_url']
+                                    else:
+                                        image = request.url_root+display+product_value['image']
                                     data = {
                                         "id": product_value['id'],
                                         "price": product_value['price'],
@@ -52,7 +55,7 @@ class ProductController(Resource):
                                         "description": product_value['description'],
                                         "id_category": product_value['id_category'],
                                         "category_name": data_category.get('name'),
-                                        "image": get_image_cloudinary['resources'][0]['secure_url'],
+                                        "image": image,
                                         "name": product_value['name'],
                                     }
                                     resultData.append(data)
@@ -65,7 +68,11 @@ class ProductController(Resource):
                                 id_category = int(data_product['id_category'])
                                 Category = CategoryModels.query.filter_by(id=id_category).first()
                                 data_category = category_schema.dump(Category)
-                                get_image_cloudinary = cloudinary.api.resources_by_ids([data_product['id_cloudinary']])
+                                if UseCloundiary is True:
+                                    get_image_cloudinary = cloudinary.api.resources_by_ids([data_product['id_cloudinary']])
+                                    image = get_image_cloudinary['resources'][0]['secure_url']
+                                else:
+                                    image = request.url_root+display+data_product['image']
                                 data = {
                                     "id": data_product['id'],
                                     "price": data_product['price'],
@@ -73,12 +80,10 @@ class ProductController(Resource):
                                     "description": data_product['description'],
                                     "id_category": data_product['id_category'],
                                     "category_name": data_category.get('name'),
-                                    "image": get_image_cloudinary['resources'][0]['secure_url'],
+                                    "image": image,
                                     "name": data_product['name'],
                                 }
                                 resultData.append(data)
-                        
-
                         result = {
                             "code" : 200,
                             "SpeedTime" : ResponseApi().speed_response(start_time),
@@ -171,13 +176,17 @@ class ProductController(Resource):
                             db.session.commit()
                             Product = ProductModels.query.filter_by(name=name_product).first()
                             data_product = product_schema.dump(Product)
-                            get_image_cloudinary = cloudinary.api.resources_by_ids([data_product['id_cloudinary']])
+                            if UseCloundiary is True:
+                                get_image_cloudinary = cloudinary.api.resources_by_ids([data_product['id_cloudinary']])
+                                image = get_image_cloudinary['resources'][0]['secure_url']
+                            else:
+                                image = request.url_root+display+data_product['image']
                             data = {
                                 "id": data_product['id'],
                                 "name" : data_product['name'],
                                 "id_category" : data_product['id_category'],
                                 "description" : data_product['description'],
-                                "image" : get_image_cloudinary['resources'][0]['secure_url'],
+                                "image" : image,
                                 "stock" : data_product['stock'],
                                 "price" : data_product['price'],
                             }
@@ -277,9 +286,11 @@ class ProductController(Resource):
                                         }
                                         response = ResponseApi().response_api(result)
                                         return response
-                            
-                            get_image_cloudinary = cloudinary.api.resources_by_ids([id_cloudinary])
-                            image = get_image_cloudinary['resources'][0]['secure_url'],
+                            if UseCloundiary is True:
+                                get_image_cloudinary = cloudinary.api.resources_by_ids([id_cloudinary])
+                                image = get_image_cloudinary['resources'][0]['secure_url'],
+                            else:
+                                image = request.url_root+display+data_product['image']
                             datas = {
                                 "id" : id_product,
                                 "name" : name_product,
