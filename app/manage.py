@@ -3,17 +3,25 @@ from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate, MigrateCommand
 from flask_sqlalchemy import SQLAlchemy
 import cloudinary
+from imagekitio import ImageKit
+
 
 # from dotenv import load_dotenv
 import os
 
+imagekit = ImageKit(
+    private_key = os.getenv('PRIVATE_KEY_IMAGEKIT'),
+    public_key = os.getenv('PUBLIC_KEY_IMAGEKIT'),
+    url_endpoint = os.getenv('URL_ENDPOINT_IMAEKIT'),
+)
 # load_dotenv()
 cloudinary.config( 
   cloud_name = os.getenv('CLOUD_NAME'),
   api_key = os.getenv('API_KEY'),
   api_secret = os.getenv('API_SECRET'),
 )
-UseCloundiary = os.getenv('USE_CLOUDINARY'),
+UseCloundiary = os.getenv('USE_CLOUDINARY')
+UseImagekit = os.getenv('USE_IMAGEKIT')
 picFolder = os.path.join('../assets','images')
 DB_DATABASE = os.getenv('DB_DATABASE')
 DB_USERNAME = os.getenv('DB_USERNAME')

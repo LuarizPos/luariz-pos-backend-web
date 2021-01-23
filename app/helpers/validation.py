@@ -16,6 +16,12 @@ class ValidationInput(Resource):
                 "message": "email is required",
                 "result": []
             }
+        elif param['no_telp'] == "" :
+            result = {
+                "code" : 400,
+                "message": "no_telp is required",
+                "result": []
+            }
         elif param['password_1'] == '':
             result = {
                 "code" : 400,
@@ -28,16 +34,16 @@ class ValidationInput(Resource):
                 "message": "invalid is password",
                 "result": []
             }
-        elif param['status'] == '':
+        elif param['id_company'] == '':
             result = {
                 "code" : 400,
-                "message": "status is required",
+                "message": "id_company is required",
                 "result": []
             }
-        elif param['position'] == '':
+        elif param['address'] == '':
             result = {
                 "code" : 400,
-                "message": "position is required",
+                "message": "address is required",
                 "result": []
             }
         elif param['role_id'] == '':
@@ -54,9 +60,10 @@ class ValidationInput(Resource):
                     'name': param['name'],
                     'email': param['email'],
                     'password': hashlib.md5(param['password_1'].encode('utf-8')).hexdigest(),
-                    'status': param['status'],
-                    'position': param['position'],
                     'role_id': param['role_id'],
+                    'id_company': param['id_company'],
+                    'address': param['address'],
+                    "no_telp": param['no_telp'],
                 }
             }
         return result

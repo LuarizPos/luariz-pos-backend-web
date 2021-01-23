@@ -37,7 +37,6 @@ class UsersController(Resource):
                                 "name":user_response['name'],
                                 "email":user_response['email'],
                                 "role_id":user_response['role_id'],
-                                "status":user_response['status'],
                                 "position":user_response['position'],
                                 "token":user_response['token'],
                             }
@@ -94,7 +93,7 @@ class UsersController(Resource):
                     validation = ValidationInput().validation_register(form_req)
                     if validation['code'] == 200:
                         input_data = validation['result']
-                        new_user = UsersModel(input_data['name'], input_data['email'] , input_data['password'], True, input_data['position'], input_data['role_id'],'null')
+                        new_user = UsersModel(input_data['name'], input_data['email'] , input_data['no_telp'], input_data['password'], input_data['role_id'], 'null', input_data['id_company'], input_data['address'])
                         db.session.add(new_user)
                         db.session.commit()
                         result = {
@@ -167,7 +166,6 @@ class UsersController(Resource):
                                     "name":user_response['name'],
                                     "email":user_response['email'],
                                     "role_id":user_response['role_id'],
-                                    "status":user_response['status'],
                                     "position":user_response['position'],
                                     "expired_session":expired_session.strftime('%Y/%m/%d %H:%M:%S')
                                 }
@@ -183,7 +181,6 @@ class UsersController(Resource):
                                             "name":update_session['name'],
                                             "email":update_session['email'],
                                             "role_id":update_session['role_id'],
-                                            "status":update_session['status'],
                                             "position":update_session['position'],
                                             "token":update_session['token'],
                                         }

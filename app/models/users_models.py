@@ -15,7 +15,7 @@ class UsersModel(db.Model):
     token =  db.Column(db.String(500))
 
 
-    def __init__(self, name, email,no_telp, password, status, position, user_role_id,token, id_company, address):
+    def __init__(self, name, email,no_telp, password, user_role_id,token, id_company, address):
         self.name = name
         self.no_telp = no_telp
         self.email = email

@@ -4,8 +4,9 @@ from flask_restful import Resource
 from flask import request, jsonify
 from app.helpers.helpers import Helpers
 from app.helpers.response import ResponseApi
-from app.manage import db, UseCloundiary
+from app.manage import db, UseCloundiary, UseImagekit, imagekit
 from cloudinary.uploader import upload
+
 import cloudinary.api
 from PIL import Image
 import io
@@ -41,12 +42,15 @@ class ProductController(Resource):
                                     id_category = (product_value['id_category'])
                                     Category = CategoryModels.query.filter_by(id=id_category).first()
                                     data_category = category_schema.dump(Category)
-                                    if UseCloundiary is True:
+                                    if bool(UseCloundiary) is True:
                                         # print(UseCloundiary)
                                         # pdb.run('mymodule.test()')
                                         get_image_cloudinary = cloudinary.api.resources_by_ids([product_value['id_cloudinary']])
                                         image = get_image_cloudinary['resources'][0]['secure_url']
-                                    else:
+                                    if bool(UseImagekit) is True:
+                                        get_imagekit = imagekit.get_file_details(product_value['id_imagekit']) 
+                                        image = get_imagekit['response']['url']
+                                    if bool(UseImagekit) is False and bool(UseCloundiary) is False:
                                         image = request.url_root+display+product_value['image']
                                     data = {
                                         "id": product_value['id'],
@@ -68,10 +72,13 @@ class ProductController(Resource):
                                 id_category = int(data_product['id_category'])
                                 Category = CategoryModels.query.filter_by(id=id_category).first()
                                 data_category = category_schema.dump(Category)
-                                if UseCloundiary is True:
+                                if bool(UseCloundiary) is True:
                                     get_image_cloudinary = cloudinary.api.resources_by_ids([data_product['id_cloudinary']])
                                     image = get_image_cloudinary['resources'][0]['secure_url']
-                                else:
+                                if bool(UseImagekit) is True:
+                                    get_imagekit = imagekit.get_file_details(data_product['id_imagekit']) 
+                                    image = get_imagekit['response']['url']
+                                if bool(UseImagekit) is False and bool(UseCloundiary) is False:
                                     image = request.url_root+display+data_product['image']
                                 data = {
                                     "id": data_product['id'],
@@ -143,6 +150,9 @@ class ProductController(Resource):
                             price = form_value['price']
                             stock = form_value['stock']
                             image = ""
+                            id_cloudinary = ''
+                            id_imagekit = ''
+                            save_imagekit = ''
                             if form_value['image']:
                                 image_encode = form_value['image']['image_blob'] 
                                 image_name = form_value['image']['name']
@@ -155,13 +165,31 @@ class ProductController(Resource):
                                         image_file = Image.open(io.BytesIO(image_decode))
                                         image_file = image_file.convert('RGB')
                                         image_file.save(image_path)
-                                        upload_cloudinary = upload(image_path, 
-                                            folder = "assets/images/", 
-                                            public_id = image_name+'.'+image_type)
-                                        # print(upload_cloudinary['public_id'])
+                                        if bool(UseCloundiary) is True:
+                                            # Upload cloudinary
+                                            upload_cloudinary = upload(image_path, 
+                                                folder = "assets/images/", 
+                                                public_id = image_name+'.'+image_type)
+                                            id_cloudinary = upload_cloudinary['public_id']
+                                        
+                                        if bool(UseImagekit) is True:
+                                            # Upload imagekitt
+                                            save_imagekit = imagekit.upload_file(
+                                                file= image_encode, # required
+                                                file_name= image_name+'.'+image_type, # required
+                                                options= {
+                                                    "folder" : "/assets/images/",
+                                                    "tags": ["sample-tag"],
+                                                    "is_private_file": False,
+                                                    "use_unique_file_name": True,
+                                                    "response_fields": ["is_private_file", "tags"],
+                                                }
+                                            )
+                                            id_imagekit = save_imagekit['response']['fileId']
+                                        # print(UseImagekit) 
                                         # pdb.run('mymodule.test()')
                                     else:
-                                        result = {
+                                        result = { 
                                             "code" : 400,
                                             "SpeedTime" : ResponseApi().speed_response(start_time),
                                             "endpoint": "Insert Product",
@@ -171,15 +199,18 @@ class ProductController(Resource):
                                         response = ResponseApi().response_api(result)
                                         return response
                             
-                            new_product = ProductModels(id_category, name_product, description, image, upload_cloudinary['public_id'], stock, price)
+                            new_product = ProductModels(id_category, name_product, description, image, id_cloudinary, id_imagekit , stock, price)
                             db.session.add(new_product)
                             db.session.commit()
                             Product = ProductModels.query.filter_by(name=name_product).first()
                             data_product = product_schema.dump(Product)
-                            if UseCloundiary is True:
+                            if bool(UseCloundiary) is True:
                                 get_image_cloudinary = cloudinary.api.resources_by_ids([data_product['id_cloudinary']])
                                 image = get_image_cloudinary['resources'][0]['secure_url']
-                            else:
+                            if bool(UseImagekit) is True:
+                                get_imagekit = imagekit.get_file_details(data_product['id_imagekit']) 
+                                image = get_imagekit['response']['url']
+                            if bool(UseImagekit) is False and bool(UseCloundiary) is False:
                                 image = request.url_root+display+data_product['image']
                             data = {
                                 "id": data_product['id'],
@@ -258,6 +289,8 @@ class ProductController(Resource):
                             ge_product = ProductModels.query.filter_by(id=id_product).first()
                             data_product = product_schema.dump(ge_product)
                             id_cloudinary = data_product['id_cloudinary']
+                            id_imagekit = data_product['id_imagekit']
+                            save_imagekit = ''
                             if form_value['image']:
                                 image_encode = form_value['image']['image_blob'] 
                                 image_name = form_value['image']['name']
@@ -269,11 +302,32 @@ class ProductController(Resource):
                                         image_file = Image.open(io.BytesIO(image_decode))
                                         image_file = image_file.convert('RGB')
                                         image_file.save(image_path)
-                                        cloudinary.api.delete_resources([data_product['id_cloudinary']])
-                                        upload_cloudinary = upload(image_path, 
-                                            folder = "assets/images/", 
-                                            public_id = image_name+'.'+image_type)
-                                        id_cloudinary = upload_cloudinary['public_id']
+                                        
+                                        # Upload cloudinary
+                                        if bool(UseCloundiary) is True:
+                                            cloudinary.api.delete_resources([data_product['id_cloudinary']])
+                                            upload_cloudinary = upload(image_path, 
+                                                folder = "assets/images/", 
+                                                public_id = image_name+'.'+image_type)
+                                            id_cloudinary = upload_cloudinary['public_id']
+                                        
+                                        # Upload imagekitt
+                                        if bool(UseImagekit) is True:
+                                            imagekit.delete_file(data_product['id_imagekit'])
+                                            save_imagekit = imagekit.upload_file(
+                                                file= image_encode, # required
+                                                file_name= image_name+'.'+image_type, # required
+                                                options= {
+                                                    "folder" : "/assets/images/",
+                                                    "tags": ["sample-tag"],
+                                                    "is_private_file": False,
+                                                    "use_unique_file_name": True,
+                                                    "response_fields": ["is_private_file", "tags"],
+                                                }
+                                            )
+                                            id_imagekit = save_imagekit['response']['fileId']
+                                        # print(UseImagekit) 
+                                        # pdb.run('mymodule.test()')
                                         # print(upload_cloudinary)
                                         # pdb.run('mymodule.test()')
                                     else:
@@ -286,10 +340,13 @@ class ProductController(Resource):
                                         }
                                         response = ResponseApi().response_api(result)
                                         return response
-                            if UseCloundiary is True:
+                            if bool(UseCloundiary) is True:
                                 get_image_cloudinary = cloudinary.api.resources_by_ids([id_cloudinary])
                                 image = get_image_cloudinary['resources'][0]['secure_url'],
-                            else:
+                            if bool(UseImagekit) is True:
+                                get_imagekit = imagekit.get_file_details(id_imagekit) 
+                                image = get_imagekit['response']['url']
+                            if bool(UseImagekit) is False and bool(UseCloundiary) is False:
                                 image = request.url_root+display+data_product['image']
                             datas = {
                                 "id" : id_product,
@@ -373,7 +430,11 @@ class ProductController(Resource):
                             id_product = form_value['id_product']
                             product = ProductModels.query.filter_by(id=id_product).first()
                             product_value = product_schema.dump(product)
+                            # Delete cloudinary
                             cloudinary.api.delete_resources([product_value['id_cloudinary']])
+                            # Delete imagekit
+                            imagekit.delete_file(product_value['id_imagekit'])
+
                             db.session.delete(product)
                             db.session.commit()
                             data = {
