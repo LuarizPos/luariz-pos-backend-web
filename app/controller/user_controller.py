@@ -36,8 +36,7 @@ class UsersController(Resource):
                                 "id":user_response['id'],
                                 "name":user_response['name'],
                                 "email":user_response['email'],
-                                "role_id":user_response['role_id'],
-                                "position":user_response['position'],
+                                "role_id":user_response['user_role_id'],
                                 "token":user_response['token'],
                             }
                         }
@@ -165,8 +164,7 @@ class UsersController(Resource):
                                 data_user = {
                                     "name":user_response['name'],
                                     "email":user_response['email'],
-                                    "role_id":user_response['role_id'],
-                                    "position":user_response['position'],
+                                    "role_id":user_response['user_role_id'],
                                     "expired_session":expired_session.strftime('%Y/%m/%d %H:%M:%S')
                                 }
                                 encode_token = Helpers().encode_token(data_user)
@@ -180,8 +178,7 @@ class UsersController(Resource):
                                         "result": {
                                             "name":update_session['name'],
                                             "email":update_session['email'],
-                                            "role_id":update_session['role_id'],
-                                            "position":update_session['position'],
+                                            "role_id":update_session['user_role_id'],
                                             "token":update_session['token'],
                                         }
                                     }
