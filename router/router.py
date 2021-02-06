@@ -15,9 +15,8 @@ urls_blueprint = Blueprint('urls', __name__, url_prefix='/v1')
 @urls_blueprint.route('/dashboard', methods=['GET'])
 def get_dashboard():
     param = {
-        # 'auth':request.headers['Authorization'],
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
-        # 'token':request.headers['Token']
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
     }
     return DashboardController().get_dashboard(param)
 
@@ -26,9 +25,8 @@ def get_dashboard():
 def get_user():
     param = {
         'form':request.json['GetUser'],
-        # 'auth':request.headers['Authorization'],
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
-        # 'token':request.headers['Token']
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
     }
     return UsersController().get_user(param)
 
@@ -36,8 +34,8 @@ def get_user():
 def register_user():
     param = {
         'form':request.json['Register'],
-        # 'auth':request.headers['Authorization']
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        'auth':request.headers['Authorization']
+        
     }
     return UsersController().register_user(param)
 
@@ -45,10 +43,17 @@ def register_user():
 def login_user():
     param = {
         'form':request.json['Login'],
-        # 'auth':request.headers['Authorization']
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
+        'auth':request.headers['Authorization']
     }
     return UsersController().login_user(param)
+
+@urls_blueprint.route('/logout_user', methods=['POST'])
+def logout_user():
+    param = {
+        'form':request.json['Logout'],
+        'auth':request.headers['Authorization']
+    }
+    return UsersController().logout_user(param)
 
 @urls_blueprint.route('/generate_token', methods=['POST'])
 def generate_token():
@@ -67,9 +72,8 @@ def decode_token():
 def insert_product():
     param = {
         'form':request.json['Product'],
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
-        # 'auth':request.headers['Authorization'],
-        # 'token':request.headers['Token']
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
     }
     
     return ProductController().insert_product(param)
@@ -78,9 +82,8 @@ def insert_product():
 def update_product():
     param = {
         'form':request.json['Product'],
-        # 'auth':request.headers['Authorization'],
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
-        # 'token':request.headers['Token']
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
     }
     
     return ProductController().update_product(param)
@@ -89,9 +92,8 @@ def update_product():
 def get_product():
     param = {
         'form':request.json['Product'],
-        # 'auth':request.headers['Authorization'],
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
-        # 'token':request.headers['Token']
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
     }
     
     return ProductController().get_product(param)
@@ -100,9 +102,8 @@ def get_product():
 def delete_product():
     param = {
         'form':request.json['Product'],
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
-        # 'auth':request.headers['Authorization'],
-        # 'token':request.headers['Token']
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
     }
     
     return ProductController().delete_product(param)
@@ -115,9 +116,8 @@ def delete_product():
 def insert_category():
     param = {
         'form':request.json['Category'],
-        # 'auth':request.headers['Authorization'],
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
-        # 'token':request.headers['Token']
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
     }
     
     return CategoryController().insert_category(param)
@@ -126,9 +126,8 @@ def insert_category():
 def update_category():
     param = {
         'form':request.json['Category'],
-        # 'auth':request.headers['Authorization'],
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
-        # 'token':request.headers['Token']
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
     }
     
     return CategoryController().update_category(param)
@@ -137,9 +136,8 @@ def update_category():
 def get_category():
     param = {
         'form':request.json['Category'],
-        # 'auth':request.headers['Authorization'],
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
-        # 'token':request.headers['Token']
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
     }
     
     return CategoryController().get_category(param)
@@ -148,9 +146,8 @@ def get_category():
 def delete_category():
     param = {
         'form':request.json['Category'],
-        # 'auth':request.headers['Authorization'],
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
-        # 'token':request.headers['Token']
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
     }
     
     return CategoryController().delete_category(param)
@@ -164,9 +161,8 @@ def delete_category():
 def get_company():
     param = {
         'form':request.json['Company'],
-        # 'auth':request.headers['Authorization'],
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
-        # 'token':request.headers['Token']
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
     }
     
     return ComponyController().get_company(param)
@@ -175,9 +171,8 @@ def get_company():
 def insert_company():
     param = {
         'form':request.json['Company'],
-        # 'auth':request.headers['Authorization'],
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
-        # 'token':request.headers['Token']
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
     }
     
     return ComponyController().insert_company(param)
@@ -186,9 +181,8 @@ def insert_company():
 def update_company():
     param = {
         'form':request.json['Company'],
-        # 'auth':request.headers['Authorization'],
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
-        # 'token':request.headers['Token']
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
     }
     
     return ComponyController().update_company(param)
@@ -197,9 +191,8 @@ def update_company():
 def delete_company():
     param = {
         'form':request.json['Company'],
-        # 'auth':request.headers['Authorization'],
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
-        # 'token':request.headers['Token']
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
     }
     
     return ComponyController().delete_company(param)
@@ -210,9 +203,8 @@ def delete_company():
 def get_transaction():
     param = {
         'form':request.json['Transaction'],
-        # 'auth':request.headers['Authorization'],
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
-        # 'token':request.headers['Token']
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
     }
     
     return TransactionController().get_transaction(param)
@@ -221,9 +213,8 @@ def get_transaction():
 def insert_transaction():
     param = {
         'form':request.json['Transaction'],
-        # 'auth':request.headers['Authorization'],
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
-        # 'token':request.headers['Token']
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
     }
     
     return TransactionController().insert_transaction(param)
@@ -232,9 +223,8 @@ def insert_transaction():
 def update_transaction():
     param = {
         'form':request.json['Transaction'],
-        # 'auth':request.headers['Authorization'],
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
-        # 'token':request.headers['Token']
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
     }
     
     return TransactionController().update_transaction(param)
@@ -243,9 +233,8 @@ def update_transaction():
 def delete_transaction():
     param = {
         'form':request.json['Transaction'],
-        # 'auth':request.headers['Authorization'],
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
-        # 'token':request.headers['Token']
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
     }
     
     return TransactionController().delete_transaction(param)
@@ -255,10 +244,9 @@ def delete_transaction():
 @urls_blueprint.route('/get_authority', methods=['POST'])
 def get_authority():
     param = {
-        'form':request.json['Transaction'],
-        # 'auth':request.headers['Authorization'],
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
-        # 'token':request.headers['Token']
+        'form':request.json['Authority'],
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
     }
     
     return AuthorityController().get_authority(param)
@@ -266,10 +254,9 @@ def get_authority():
 @urls_blueprint.route('/insert_authority', methods=['POST'])
 def insert_authority():
     param = {
-        'form':request.json['Transaction'],
-        # 'auth':request.headers['Authorization'],
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
-        # 'token':request.headers['Token']
+        'form':request.json['Authority'],
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
     }
     
     return AuthorityController().insert_authority(param)
@@ -277,10 +264,9 @@ def insert_authority():
 @urls_blueprint.route('/update_authority', methods=['POST'])
 def update_authority():
     param = {
-        'form':request.json['Transaction'],
-        # 'auth':request.headers['Authorization'],
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
-        # 'token':request.headers['Token']
+        'form':request.json['Authority'],
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
     }
     
     return AuthorityController().update_authority(param)
@@ -288,10 +274,9 @@ def update_authority():
 @urls_blueprint.route('/delete_authority', methods=['POST'])
 def delete_authority():
     param = {
-        'form':request.json['Transaction'],
-        # 'auth':request.headers['Authorization'],
-        'auth':'d5ef9bf84492f777e60ecd81d4bd1e227b20cf1336a0c49fb4cfc7717760d228418',
-        # 'token':request.headers['Token']
+        'form':request.json['Authority'],
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
     }
     
     return AuthorityController().delete_authority(param)

@@ -25,16 +25,16 @@ class ProductController(Resource):
     def get_product(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
                 resultData = []
                 if form_req:
                     try:
                         image = ''
-                        showAll = form_req['ShowAll']
+                        show_all = form_req['show_all']
                         id_product = form_req['id_product']
-                        if showAll:
+                        if show_all:
                             Product = ProductModels.query.order_by(ProductModels.id.asc())
                             data_product = products_schema.dump(Product)
                             for product_value in data_product:
@@ -115,14 +115,14 @@ class ProductController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Get Product",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Get Product",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         else:
             result = {
                 "code" : 400,
@@ -137,8 +137,8 @@ class ProductController(Resource):
     def insert_product(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
                 resultData = []
                 if form_req:
@@ -247,14 +247,14 @@ class ProductController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Insert Product",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Insert Product",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         else:
             result = {
                 "code" : 400,
@@ -270,8 +270,8 @@ class ProductController(Resource):
     def update_product(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
                 resultData = []
                 image = ""
@@ -397,14 +397,14 @@ class ProductController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Update Product",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Update Product",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         else:
             result = {
                 "code" : 400,
@@ -420,28 +420,45 @@ class ProductController(Resource):
     def delete_product(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
                 resultData = []
                 if form_req:
                     try:
                         for form_value in form_req:
-                            id_product = form_value['id_product']
-                            product = ProductModels.query.filter_by(id=id_product).first()
-                            product_value = product_schema.dump(product)
-                            # Delete cloudinary
-                            cloudinary.api.delete_resources([product_value['id_cloudinary']])
-                            # Delete imagekit
-                            imagekit.delete_file(product_value['id_imagekit'])
+                            delete_All = form_value['delete_all']
+                            if delete_All:
+                                product = ProductModels.query.order_by(ProductModels.id.asc())
+                                data_product = products_schema.dump(product)
+                                for product_value in data_product:
+                                    data = {
+                                        'id_product':product_value['id'],
+                                        "name" : product_value['name'],
+                                    }
+                                    # Delete cloudinary
+                                    cloudinary.api.delete_resources([product_value['id_cloudinary']])
+                                    # Delete imagekit
+                                    imagekit.delete_file(product_value['id_imagekit'])
+                                    resultData.append(data)
+                                ProductModels.query.delete()
+                                db.session.commit()
+                            else:
+                                id_product = form_value['id_product']
+                                product = ProductModels.query.filter_by(id=id_product).first()
+                                product_value = product_schema.dump(product)
+                                # Delete cloudinary
+                                cloudinary.api.delete_resources([product_value['id_cloudinary']])
+                                # Delete imagekit
+                                imagekit.delete_file(product_value['id_imagekit'])
 
-                            db.session.delete(product)
-                            db.session.commit()
-                            data = {
-                                'id_product':product_value['id'],
-                                "name" : product_value['name'],
-                            }
-                            resultData.append(data)
+                                db.session.delete(product)
+                                db.session.commit()
+                                data = {
+                                    'id_product':product_value['id'],
+                                    "name" : product_value['name'],
+                                }
+                                resultData.append(data)
                         result = {
                             "code" : 200,
                             "SpeedTime" : ResponseApi().speed_response(start_time),
@@ -467,14 +484,14 @@ class ProductController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Update Product",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Update Product",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         else:
             result = {
                 "code" : 400,

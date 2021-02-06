@@ -14,26 +14,40 @@ class AuthorityController(Resource):
     def get_authority(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
+                resultData = []
                 if form_req:
                     try:
-                        showAll = form_req['ShowAll']
+                        show_all = form_req['show_all']
                         id_authority = form_req['id_authority']
-                        if showAll:
+                        if show_all:
                             Authority = AuthorityModels.query.all()
-                            data = authoritys_schema.dump(Authority)
+                            data_auth = authoritys_schema.dump(Authority)
+                            for auth_value in data_auth:
+                                if(auth_value):
+                                    data = {
+                                        "id_authority": auth_value['id'],
+                                        "name_authority": auth_value['name_authority'],
+                                    }
+                                    resultData.append(data)
+
                         else:
                             Authority = AuthorityModels.query.filter_by(id=id_authority).first()
-                            data = authoritys_schema.dump(Authority)
+                            data_auth = authority_schema.dump(Authority)
+                            data = {
+                                "id_authority": data_auth['id'],
+                                "name_authority": data_auth['name_authority'],
+                            }
+                            resultData.append(data)
                         
                         result = {
                             "code" : 200,
                             "SpeedTime" : ResponseApi().speed_response(start_time),
                             "endpoint": "Get Authority",
                             "message": "Get Authority Succes",
-                            "result": data
+                            "result": resultData
                         }
                     except Exception as e:
                         error  = str(e)
@@ -52,14 +66,14 @@ class AuthorityController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Get Authority",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Get Authority",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         else:
             result = {
                 "code" : 400,
@@ -74,8 +88,8 @@ class AuthorityController(Resource):
     def insert_authority(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
                 resultData = []
                 if form_req:
@@ -115,14 +129,14 @@ class AuthorityController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Insert Authority",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Insert Authority",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         else:
             result = {
                 "code" : 400,
@@ -138,8 +152,8 @@ class AuthorityController(Resource):
     def update_authority(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
                 resultData = []
                 if form_req:
@@ -180,14 +194,14 @@ class AuthorityController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Update Authority",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Update Authority",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         else:
             result = {
                 "code" : 400,
@@ -202,23 +216,36 @@ class AuthorityController(Resource):
     def delete_authority(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
                 resultData = []
                 if form_req:
                     try:
                         for form_value in form_req:
-                            id_authority = form_value['id_authority']
-                            Authority = AuthorityModels.query.filter_by(id=id_authority).first()
-                            Authority_value = authority_schema.dump(Authority)
-                            db.session.delete(Authority)
-                            db.session.commit()
-                            data = {
-                                'id':Authority_value['id'],
-                                "name_authority" : Authority_value['name_authority'],
-                            }
-                            resultData.append(data)
+                            delete_All = form_value['delete_all']
+                            if delete_All:
+                                Authority = AuthorityModels.query.order_by(AuthorityModels.id.asc())
+                                data_authority = authoritys_schema.dump(Authority)
+                                for auth_value in data_authority:
+                                    data = {
+                                        'id':auth_value['id'],
+                                        "name_authority" : auth_value['name_authority'],
+                                    }
+                                    resultData.append(data)
+                                AuthorityModels.query.delete()
+                                db.session.commit()
+                            else:
+                                id_authority = form_value['id_authority']
+                                Authority = AuthorityModels.query.filter_by(id=id_authority).first()
+                                Authority_value = authority_schema.dump(Authority)
+                                db.session.delete(Authority)
+                                db.session.commit()
+                                data = {
+                                    'id':Authority_value['id'],
+                                    "name_authority" : Authority_value['name_authority'],
+                                }
+                                resultData.append(data)
                         result = {
                             "code" : 200,
                             "SpeedTime" : ResponseApi().speed_response(start_time),
@@ -244,14 +271,14 @@ class AuthorityController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Update Authority",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Update Authority",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         else:
             result = {
                 "code" : 400,

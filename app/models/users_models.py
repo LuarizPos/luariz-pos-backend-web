@@ -10,12 +10,13 @@ class UsersModel(db.Model):
     email = db.Column(db.String(60), index=True, unique=True)
     address = db.Column(db.String(500))
     password = db.Column(db.String(128))
-    no_telp = db.Column(db.Integer)
+    no_telp = db.Column(db.String(15))
     user_role_id =  db.Column(db.Integer)
     token =  db.Column(db.String(500))
+    status = db.Column(db.String(50))
 
 
-    def __init__(self, name, email,no_telp, password, user_role_id,token, id_company, address):
+    def __init__(self, name, email,no_telp, password, user_role_id,token, id_company, address, status):
         self.name = name
         self.no_telp = no_telp
         self.email = email
@@ -24,7 +25,8 @@ class UsersModel(db.Model):
         self.token = token
         self.id_company = id_company
         self.address = address
+        self.status = status
 
 class UsersSchema(ma.Schema):
   class Meta:
-    fields = ('id', 'name', 'email', 'no_telp', 'password', 'user_role_id', 'token', 'id_company', 'address')
+    fields = ('id', 'name', 'email', 'no_telp', 'password', 'user_role_id', 'token', 'id_company', 'address', 'status')

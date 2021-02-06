@@ -18,15 +18,15 @@ class CategoryController(Resource):
     def get_category(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
                 resultData = []
                 if form_req:
                     try:
-                        showAll = form_req['ShowAll']
+                        show_all = form_req['show_all']
                         id_category = form_req['id_category']
-                        if showAll:
+                        if show_all:
                             Category = CategoryModels.query.all()
                             data_category = categorys_schema.dump(Category)
                             for category_value in data_category:
@@ -74,14 +74,14 @@ class CategoryController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Get Category",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Get Category",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         else:
             result = {
                 "code" : 400,
@@ -96,8 +96,8 @@ class CategoryController(Resource):
     def insert_category(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
                 resultData = []
                 if form_req:
@@ -139,14 +139,14 @@ class CategoryController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Insert Category",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Insert Category",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         else:
             result = {
                 "code" : 400,
@@ -162,8 +162,8 @@ class CategoryController(Resource):
     def update_category(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
                 resultData = []
                 if form_req:
@@ -204,14 +204,14 @@ class CategoryController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Update Category",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Update Category",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         else:
             result = {
                 "code" : 400,
@@ -227,23 +227,36 @@ class CategoryController(Resource):
     def delete_category(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
                 resultData = []
                 if form_req:
                     try:
                         for form_value in form_req:
-                            id_category = form_value['id_category']
-                            category = CategoryModels.query.filter_by(id=id_category).first()
-                            category_value = category_schema.dump(category)
-                            db.session.delete(category)
-                            db.session.commit()
-                            data = {
-                                'id_category':category_value['id'],
-                                "name" : category_value['name'],
-                            }
-                            resultData.append(data)
+                            delete_All = form_value['delete_all']
+                            if delete_All:
+                                category = CategoryModels.query.order_by(CategoryModels.id.asc())
+                                data_category = categorys_schema.dump(category)
+                                for category_value in data_category:
+                                    data = {
+                                        'id_category':category_value['id'],
+                                        "name" : category_value['name'],
+                                    }
+                                    resultData.append(data)
+                                CategoryModels.query.delete()
+                                db.session.commit()
+                            else:
+                                id_category = form_value['id_category']
+                                category = CategoryModels.query.filter_by(id=id_category).first()
+                                category_value = category_schema.dump(category)
+                                db.session.delete(category)
+                                db.session.commit()
+                                data = {
+                                    'id_category':category_value['id'],
+                                    "name" : category_value['name'],
+                                }
+                                resultData.append(data)
                         result = {
                             "code" : 200,
                             "SpeedTime" : ResponseApi().speed_response(start_time),
@@ -269,14 +282,14 @@ class CategoryController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Update Category",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Update Category",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         else:
             result = {
                 "code" : 400,

@@ -15,14 +15,14 @@ class TransactionController(Resource):
     def get_transaction(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
                 if form_req:
                     try:
-                        showAll = form_req['ShowAll']
+                        show_all = form_req['show_all']
                         id_transaction = form_req['id_transaction']
-                        if showAll:
+                        if show_all:
                             Transaction = TransactionModels.query.all()
                             data = transactions_schema.dump(Transaction)
                             
@@ -54,14 +54,14 @@ class TransactionController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Get Transaction",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Get Transaction",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         else:
             result = {
                 "code" : 400,
@@ -76,8 +76,8 @@ class TransactionController(Resource):
     def insert_transaction(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
                 resultData = []
                 if form_req:
@@ -129,14 +129,14 @@ class TransactionController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Insert Transaction",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Insert Transaction",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         else:
             result = {
                 "code" : 400,
@@ -151,8 +151,8 @@ class TransactionController(Resource):
     def update_transaction(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
                 resultData = []
                 if form_req:
@@ -204,14 +204,14 @@ class TransactionController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Update Transaction",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Update Transaction",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         else:
             result = {
                 "code" : 400,
@@ -226,28 +226,46 @@ class TransactionController(Resource):
     def delete_transaction(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
                 resultData = []
                 if form_req:
                     try:
                         for form_value in form_req:
-                            id_transaction = form_value['id_transaction']
-                            Transaction = TransactionModels.query.filter_by(id=id_transaction).first()
-                            transaction_value = transaction_schema.dump(Transaction)
-                            db.session.delete(Transaction)
-                            db.session.commit()
-                            data = {
-                                'id':transaction_value['id'],
-                                "id_company" : transaction_value['id_company'],
-                                "id_user_company" : transaction_value['id_user_company'],
-                                "id_user_buyer" : transaction_value['id_user_buyer'],
-                                "buyer_name" : transaction_value['buyer_name'],
-                                "date_time" : transaction_value['date_time'],
-                                "amount_of_charge" : transaction_value['amount_of_charge'],
-                            }
-                            resultData.append(data)
+                            delete_All = form_value['delete_all']
+                            if delete_All:
+                                Transaction = TransactionModels.query.order_by(TransactionModels.id.asc())
+                                data_transaction = transactions_schema.dump(Transaction)
+                                for transaction_value in data_transaction:
+                                    data = {
+                                        'id':transaction_value['id'],
+                                        "id_company" : transaction_value['id_company'],
+                                        "id_user_company" : transaction_value['id_user_company'],
+                                        "id_user_buyer" : transaction_value['id_user_buyer'],
+                                        "buyer_name" : transaction_value['buyer_name'],
+                                        "date_time" : transaction_value['date_time'],
+                                        "amount_of_charge" : transaction_value['amount_of_charge'],
+                                    }
+                                    resultData.append(data)
+                                TransactionModels.query.delete()
+                                db.session.commit()
+                            else:
+                                id_transaction = form_value['id_transaction']
+                                Transaction = TransactionModels.query.filter_by(id=id_transaction).first()
+                                transaction_value = transaction_schema.dump(Transaction)
+                                db.session.delete(Transaction)
+                                db.session.commit()
+                                data = {
+                                    'id':transaction_value['id'],
+                                    "id_company" : transaction_value['id_company'],
+                                    "id_user_company" : transaction_value['id_user_company'],
+                                    "id_user_buyer" : transaction_value['id_user_buyer'],
+                                    "buyer_name" : transaction_value['buyer_name'],
+                                    "date_time" : transaction_value['date_time'],
+                                    "amount_of_charge" : transaction_value['amount_of_charge'],
+                                }
+                                resultData.append(data)
                         result = {
                             "code" : 200,
                             "SpeedTime" : ResponseApi().speed_response(start_time),
@@ -272,14 +290,14 @@ class TransactionController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Update Transaction",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Update Transaction",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         else:
             result = {
                 "code" : 400,

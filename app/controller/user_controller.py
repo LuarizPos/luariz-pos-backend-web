@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from app.models.users_models import UsersModel, UsersSchema
 import json
 import os
+import pdb
 
 user_schema = UsersSchema()
 users_schema = UsersSchema(many=True)
@@ -17,8 +18,8 @@ class UsersController(Resource):
     def get_user(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                  form_req = param['form']
                  validation = ValidationInput().validation_get_users(form_req)
                  if validation['code'] == 200:
@@ -57,14 +58,14 @@ class UsersController(Resource):
                             "result": {}
                         }
 
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Get Users",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Get Users",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
             
         else:
             result = {
@@ -92,7 +93,7 @@ class UsersController(Resource):
                     validation = ValidationInput().validation_register(form_req)
                     if validation['code'] == 200:
                         input_data = validation['result']
-                        new_user = UsersModel(input_data['name'], input_data['email'] , input_data['no_telp'], input_data['password'], input_data['role_id'], 'null', input_data['id_company'], input_data['address'])
+                        new_user = UsersModel(input_data['name'], input_data['email'] , input_data['no_telp'], input_data['password'], input_data['role_id'], 'null', input_data['id_company'], input_data['address'],"")
                         db.session.add(new_user)
                         db.session.commit()
                         result = {
@@ -145,8 +146,7 @@ class UsersController(Resource):
     def login_user(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            form_req = param['form']
-            
+            form_req = param['form']    
             if form_req:
                 try:
                     validation = ValidationInput().validation_login(form_req)
@@ -161,15 +161,17 @@ class UsersController(Resource):
                             
                             if user_response['password'] == password:
                                 expired_session = (datetime.now() + timedelta(minutes = int(os.getenv('SESSION_EXPIRED'))))
+                                
                                 data_user = {
                                     "name":user_response['name'],
                                     "email":user_response['email'],
                                     "role_id":user_response['user_role_id'],
-                                    "expired_session":expired_session.strftime('%Y/%m/%d %H:%M:%S')
+                                    "expired_session":expired_session.strftime('%Y/%m/%d %H:%M:%S'),
+                                    "status":"Active"
                                 }
                                 encode_token = Helpers().encode_token(data_user)
-                                update_session = self.update_session_user(user_response['id'],encode_token)
-                                if update_session:
+                                update_session = self.update_session_user(user_response['id'],encode_token,"Active")
+                                if update_session: 
                                     result = {
                                         "code" : 200,
                                         "SpeedTime" : ResponseApi().speed_response(start_time),
@@ -242,12 +244,98 @@ class UsersController(Resource):
                 "message": "Authentication signature calculation is wrong",
                 "result": {}
             }
+        response = ResponseApi().response_api(result) 
+        return response
+
+    def logout_user(self,param):
+        start_time = ResponseApi().microtime(True)
+        if Helpers().cek_auth(param):
+            form_req = param['form']    
+            if form_req:
+                try:
+                    validation = ValidationInput().validation_logout(form_req)
+                    if validation['code'] == 200:
+                        input_data = validation['result']
+                        email = input_data['email']
+                        user = UsersModel.query.filter_by(email=email).first()
+                        if user:
+                            user_response = user_schema.dump(user)
+                            expired_session = (datetime.now() + timedelta(minutes = int(os.getenv('SESSION_EXPIRED'))))
+                            data_user = {
+                                "name":user_response['name'],
+                                "email":user_response['email'],
+                                "role_id":user_response['user_role_id'],
+                                "expired_session":expired_session.strftime('%Y/%m/%d %H:%M:%S'),
+                                "status":"Logout"
+                            }
+                            encode_token = Helpers().encode_token(data_user)
+                            update_session = self.update_session_user(user_response['id'],encode_token,"Logout")
+                            if update_session: 
+                                result = {
+                                    "code" : 200,
+                                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                                    "message": "Succes Logout",
+                                    "endpoint": "Logout",
+                                    "result": {
+                                        "name":update_session['name'],
+                                        "email":update_session['email'],
+                                        "role_id":update_session['user_role_id'],
+                                        "token":update_session['token'],
+                                    }
+                                }
+                        else:
+                            result = {
+                                "code" : 400,
+                                "SpeedTime" : ResponseApi().speed_response(start_time),
+                                "endpoint": "Logout",
+                                "message": "Your account email is incorrect",
+                                "result": {}
+                            }
+                    else:
+                        result = {
+                            "code" : validation['code'],
+                            "SpeedTime" : ResponseApi().speed_response(start_time),
+                            "endpoint": "Logout",
+                            "message": validation['message'],
+                            "result": {}
+                        }
+
+                except Exception as e:
+                    error  = str(e)
+                    result = {
+                        "code" : 400,
+                        "SpeedTime" : ResponseApi().speed_response(start_time),
+                        "endpoint": "Logout",
+                        "message": error,
+                        "result": {}
+                    }
+            
+            else:
+                result = {
+                    "code" : 400,
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Logout",
+                    "message": "Form Request Is Empty",
+                    "result": {}
+                }
+
+        else:
+            result = {
+                "code" : 400,
+                "SpeedTime" : ResponseApi().speed_response(start_time),
+                "endpoint": "Logout",
+                "message": "Authentication signature calculation is wrong",
+                "result": {}
+            }
+
         response = ResponseApi().response_api(result)
         return response
+
     
-    def update_session_user(self,id,token):
+    def update_session_user(self,id,token,status):
         user = UsersModel.query.get(id)
         user.token = token
+        user.status = status
         db.session.commit()
         return user_schema.dump(user)
         

@@ -14,14 +14,14 @@ class ComponyController(Resource):
     def get_company(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
                 if form_req:
                     try:
-                        showAll = form_req['ShowAll']
+                        show_all = form_req['show_all']
                         id_company = form_req['id_company']
-                        if showAll:
+                        if show_all:
                             Company = CompanyModels.query.all()
                             data = companys_schema.dump(Company)
                         else:
@@ -52,14 +52,14 @@ class ComponyController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Get Company",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Get Company",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         else:
             result = {
                 "code" : 400,
@@ -71,12 +71,11 @@ class ComponyController(Resource):
         response = ResponseApi().response_api(result)
         return response
         
-
     def insert_company(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
                 resultData = []
                 if form_req:
@@ -129,14 +128,14 @@ class ComponyController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Insert Company",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Insert Company",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         
         else:
             result = {
@@ -153,8 +152,8 @@ class ComponyController(Resource):
     def update_company(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
                 resultData = []
                 if form_req:
@@ -207,14 +206,14 @@ class ComponyController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Update Company",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Update Company",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         else:
             result = {
                 "code" : 400,
@@ -229,29 +228,48 @@ class ComponyController(Resource):
     def delete_company(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
                 resultData = []
                 if form_req:
                     try:
                         for form_value in form_req:
-                            id_company = form_value['id_company']
-                            Company = CompanyModels.query.filter_by(id=id_company).first()
-                            Company_value = company_schema.dump(Company)
-                            db.session.delete(Company)
-                            db.session.commit()
-                            data = {
-                                'id':Company_value['id'],
-                                "name" : Company_value['name'],
-                                "address" : Company_value['address'],
-                                "no_telp" : Company_value['no_telp'],
-                                "facebook" : Company_value['facebook'],
-                                "instagram" : Company_value['instagram'],
-                                "email" : Company_value['email'],
-                                "website" : Company_value['website'],
-                            }
-                            resultData.append(data)
+                            delete_All = form_value['delete_all']
+                            if delete_All:
+                                Company = CompanyModels.query.order_by(CompanyModels.id.asc())
+                                data_company = companys_schema.dump(Company)
+                                for Company_value in data_company:
+                                    data = {
+                                        'id':Company_value['id'],
+                                        "name" : Company_value['name'],
+                                        "address" : Company_value['address'],
+                                        "no_telp" : Company_value['no_telp'],
+                                        "facebook" : Company_value['facebook'],
+                                        "instagram" : Company_value['instagram'],
+                                        "email" : Company_value['email'],
+                                        "website" : Company_value['website'],
+                                    }
+                                    resultData.append(data)
+                                CompanyModels.query.delete()
+                                db.session.commit()
+                            else:
+                                id_company = form_value['id_company']
+                                Company = CompanyModels.query.filter_by(id=id_company).first()
+                                Company_value = company_schema.dump(Company)
+                                db.session.delete(Company)
+                                db.session.commit()
+                                data = {
+                                    'id':Company_value['id'],
+                                    "name" : Company_value['name'],
+                                    "address" : Company_value['address'],
+                                    "no_telp" : Company_value['no_telp'],
+                                    "facebook" : Company_value['facebook'],
+                                    "instagram" : Company_value['instagram'],
+                                    "email" : Company_value['email'],
+                                    "website" : Company_value['website'],
+                                }
+                                resultData.append(data)
                         result = {
                             "code" : 200,
                             "SpeedTime" : ResponseApi().speed_response(start_time),
@@ -277,14 +295,14 @@ class ComponyController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Update Company",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Update Company",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         else:
             result = {
                 "code" : 400,

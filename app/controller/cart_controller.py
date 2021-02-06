@@ -14,14 +14,14 @@ class CartController(Resource):
     def get_Cart(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
                 if form_req:
                     try:
-                        showAll = form_req['ShowAll']
+                        show_all = form_req['show_all']
                         id_cart = form_req['id_cart']
-                        if showAll:
+                        if show_all:
                             Cart = CartModels.query.all()
                             data = carts_schema.dump(Cart)
                         else:
@@ -52,14 +52,14 @@ class CartController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Get Cart",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Get Cart",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         else:
             result = {
                 "code" : 400,
@@ -74,8 +74,8 @@ class CartController(Resource):
     def insert_cart(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
                 resultData = []
                 if form_req:
@@ -121,14 +121,14 @@ class CartController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Insert Cart",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Insert Cart",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         else:
             result = {
                 "code" : 400,
@@ -144,8 +144,8 @@ class CartController(Resource):
     def update_cart(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
                 resultData = []
                 if form_req:
@@ -192,14 +192,14 @@ class CartController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Update Cart",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Update Cart",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         else:
             result = {
                 "code" : 400,
@@ -215,26 +215,42 @@ class CartController(Resource):
     def delete_cart(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
-            # cek_session = Helpers().cek_session(param)
-            # if cek_session['code'] == 200:
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
                 form_req = param['form']
                 resultData = []
                 if form_req:
                     try:
                         for form_value in form_req:
-                            id_cart = form_value['id_cart']
-                            Cart = CartModels.query.filter_by(id=id_cart).first()
-                            Cart_value = cart_schema.dump(Cart)
-                            db.session.delete(Cart)
-                            db.session.commit()
-                            data = {
-                                'id_cart':Cart_value['id_cart'],
-                                "id_transaction" : Cart_value['id_transaction'],
-                                "id_product" : Cart_value['id_product'],
-                                "qty" : Cart_value['qty'],
-                                "price" : Cart_value['price'],
-                            }
-                            resultData.append(data)
+                            delete_All = form_value['delete_all']
+                            if delete_All:
+                                Cart = CartModels.query.order_by(CartModels.id.asc())
+                                data_cart = carts_schema.dump(Cart)
+                                for cart_value in data_cart:
+                                    data = {
+                                        'id_cart':cart_value['id_cart'],
+                                        "id_transaction" : cart_value['id_transaction'],
+                                        "id_product" : cart_value['id_product'],
+                                        "qty" : cart_value['qty'],
+                                        "price" : cart_value['price'],
+                                    }
+                                    resultData.append(data)
+                                CartModels.query.delete()
+                                db.session.commit()
+                            else:
+                                id_cart = form_value['id_cart']
+                                Cart = CartModels.query.filter_by(id=id_cart).first()
+                                Cart_value = cart_schema.dump(Cart)
+                                db.session.delete(Cart)
+                                db.session.commit()
+                                data = {
+                                    'id_cart':Cart_value['id_cart'],
+                                    "id_transaction" : Cart_value['id_transaction'],
+                                    "id_product" : Cart_value['id_product'],
+                                    "qty" : Cart_value['qty'],
+                                    "price" : Cart_value['price'],
+                                }
+                                resultData.append(data)
                         result = {
                             "code" : 200,
                             "SpeedTime" : ResponseApi().speed_response(start_time),
@@ -259,14 +275,14 @@ class CartController(Resource):
                         "message": "Form Request Is Empty",
                         "result": {}
                     }
-            # else:
-            #     result = {
-            #         "code" : cek_session['code'],
-            #         "SpeedTime" : ResponseApi().speed_response(start_time),
-            #         "endpoint": "Update Cart",
-            #         "message": cek_session['message'],
-            #         "result": {}
-            #     }
+            else:
+                result = {
+                    "code" : cek_session['code'],
+                    "SpeedTime" : ResponseApi().speed_response(start_time),
+                    "endpoint": "Update Cart",
+                    "message": cek_session['message'],
+                    "result": {}
+                }
         else:
             result = {
                 "code" : 400,

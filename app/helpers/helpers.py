@@ -1,11 +1,16 @@
 from flask_restful import Resource, Api
 from datetime import datetime, timedelta,  date
+from app.models.users_models import UsersModel, UsersSchema
 import hashlib 
 import hmac
 import base64
 import pybase64
 import json
 import os
+import pdb
+
+user_schema = UsersSchema()
+users_schema = UsersSchema(many=True)
 
 class Helpers(Resource):
     def encode_auth(self,param):
@@ -54,6 +59,8 @@ class Helpers(Resource):
         decode_token = self.decode_token(param)
         decode_token = json.loads(decode_token)
         time_session = decode_token['expired_session']
+        status_token = decode_token['status']
+        email_token = decode_token['email']
         expired_session = datetime.strptime(time_session,"%Y/%m/%d %H:%M:%S")
         date_now = datetime.today()
         if expired_session <= date_now:
@@ -62,9 +69,19 @@ class Helpers(Resource):
                 "message": "Session Has Expired and Must Log in Again"        
             }
         else:
-            result = {
-                "code":200,
-                "message": "Session Active"        
-            }
+            user = UsersModel.query.filter_by(email=email_token).first()
+            user_response = user_schema.dump(user)
+            status_db   = user_response['status']
+            if status_token == status_db:
+                result = {
+                    "code":200,
+                    "message": "Session Active"        
+                }
+            else:
+                result = {
+                    "code":440,
+                    "message": "Session Is Logout"        
+                }
+
         return result
         
