@@ -49,6 +49,8 @@ class ProductController(Resource):
                                         image = get_image_cloudinary['resources'][0]['secure_url']
                                     if bool(UseImagekit) is True:
                                         get_imagekit = imagekit.get_file_details(product_value['id_imagekit']) 
+                                        # print(get_imagekit)
+                                        # pdb.run('mymodule.test()')
                                         image = get_imagekit['response']['url']
                                     if bool(UseImagekit) is False and bool(UseCloundiary) is False:
                                         image = request.url_root+display+product_value['image']
@@ -66,8 +68,6 @@ class ProductController(Resource):
                         else:
                             Product = ProductModels.query.filter_by(id=id_product).first()
                             data_product = product_schema.dump(Product)
-                            # print(data_product)
-                            # pdb.run('mymodule.test()')
                             if(data_product):
                                 id_category = int(data_product['id_category'])
                                 Category = CategoryModels.query.filter_by(id=id_category).first()
@@ -78,6 +78,7 @@ class ProductController(Resource):
                                 if bool(UseImagekit) is True:
                                     get_imagekit = imagekit.get_file_details(data_product['id_imagekit']) 
                                     image = get_imagekit['response']['url']
+                                    
                                 if bool(UseImagekit) is False and bool(UseCloundiary) is False:
                                     image = request.url_root+display+data_product['image']
                                 data = {
@@ -89,48 +90,18 @@ class ProductController(Resource):
                                     "category_name": data_category.get('name'),
                                     "image": image,
                                     "name": data_product['name'],
-                                }
+                                } 
                                 resultData.append(data)
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Get Product",
-                            "message": "Get Product Succes",
-                            "result": resultData
-                        }
+                        result = ResponseApi().error_response(200, "Get Product", "Get Product Succes", start_time, resultData)
                     except Exception as e:
-                        # error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Get Product",
-                            "message": "Failed Get Data",
-                            "result": {}
-                        }
+                        error  = str(e)
+                        result = ResponseApi().error_response(400, "Get Product", error, start_time) 
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Get Product",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Get Product", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Get Product",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Get Product", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Get Product",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
+            result = ResponseApi().error_response(400, "Get Product", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response
     
@@ -223,47 +194,16 @@ class ProductController(Resource):
                             }
                             
                             resultData.append(data)
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Insert Product",
-                            "message": "Insert Product Succes",
-                            "result": resultData
-                        }
+                        result = ResponseApi().error_response(200, "Insert Product", "Insert Product Succes", start_time, resultData)
                     except Exception as e:
                         error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Insert Product",
-                            "message": error,
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(400, "Insert Product", error, start_time) 
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Insert Product",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Insert Product", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Insert Product",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Insert Product", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Insert Product",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
-        
+            result = ResponseApi().error_response(400, "Insert Product", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response
             
@@ -355,6 +295,7 @@ class ProductController(Resource):
                                 "description" : description,
                                 "image" : image,
                                 'id_cloudinary': id_cloudinary,
+                                'id_imagekit': id_imagekit,
                                 "stock" : stock,
                                 "price" : price,
                             }
@@ -373,47 +314,17 @@ class ProductController(Resource):
                             "name": data_product['name'],
                         }
                         resultData.append(data)
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Update Product",
-                            "message": "Update Product Succes",
-                            "result": resultData
-                        }
+                        
+                        result = ResponseApi().error_response(200, "Update Product", "Update Product Succes", start_time, resultData)
                     except Exception as e:
                         error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Update Product",
-                            "message": error,
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(400, "Update Product", error, start_time) 
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Update Product",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Update Product", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Update Product",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Update Product", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Update Product",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
-        
+            result = ResponseApi().error_response(400, "Update Product", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response
 
@@ -459,46 +370,15 @@ class ProductController(Resource):
                                     "name" : product_value['name'],
                                 }
                                 resultData.append(data)
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Delete Product",
-                            "message": "Delete Product Succes",
-                            "result": resultData
-                        }
-                        
+                        result = ResponseApi().error_response(200, "Delete Product", "Delete Product Succes", start_time, resultData)
                     except Exception as e:
                         error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Delete Product",
-                            "message": error,
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(400, "Delete Product", error, start_time) 
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Delete Product",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Delete Product", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Update Product",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Delete Product", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Delete Product",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
+            result = ResponseApi().error_response(400, "Delete Product", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response

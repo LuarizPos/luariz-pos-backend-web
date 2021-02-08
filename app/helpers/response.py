@@ -38,3 +38,13 @@ class ResponseApi(Resource):
         else:
             ms = d.microsecond / 1000000.
             return '%f %d' % (ms, t)
+    
+    def error_response(self, code, endpoint, messege, start_time, result={}):
+        result = {
+            "code" : code,
+            "SpeedTime" : self.speed_response(start_time),
+            "endpoint": messege,
+            "message": endpoint,
+            "result": result
+        }
+        return result

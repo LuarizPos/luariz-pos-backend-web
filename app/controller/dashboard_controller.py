@@ -32,38 +32,14 @@ class DashboardController(Resource):
                         'Product':product_data,
                         'Category':category_data
                     }
-                    result = {
-                        "code" : 200,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Get Dashboard",
-                        "message": "Get Dashboard Succes",
-                        "result": data
-                    }
+                    
+                    result = ResponseApi().error_response(200, "Get Dashboard", "Get Dashboard Succes", start_time, data)
                 except Exception as e:
-                    # error  = str(e)
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Get Dashboard",
-                        "message": "Failed Get Data",
-                        "result": {}
-                    }
-            
+                    error  = str(e)
+                    result = ResponseApi().error_response(400, "Get Dashboard", error, start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Get Category",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Get Dashboard", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Get Dashboard",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
+            result = ResponseApi().error_response(400, "Get Dashboard", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response

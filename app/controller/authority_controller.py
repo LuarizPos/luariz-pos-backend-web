@@ -42,46 +42,16 @@ class AuthorityController(Resource):
                             }
                             resultData.append(data)
                         
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Get Authority",
-                            "message": "Get Authority Succes",
-                            "result": resultData
-                        }
+                        result = ResponseApi().error_response(200, "Delete Authority", "Get Authority Succes", start_time, resultData)
                     except Exception as e:
                         error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Get Authority",
-                            "message": error,
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(400, "Get Authority", error, start_time)
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Get Authority",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Get Authority", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Get Authority",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Get Authority", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Get Authority",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
+            result = ResponseApi().error_response(400, "Get Authority", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response
 
@@ -103,49 +73,19 @@ class AuthorityController(Resource):
                                 "name_authority" : name_authority,
                             }    
                             resultData.append(data)
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Insert Authority",
-                            "message": "Insert Authority Succes",
-                            "result": resultData
-                        }    
+                        
+                        result = ResponseApi().error_response(200, "Insert Authority", "Insert Authority Succes", start_time, resultData)
                         # print(result)
                         # pdb.run('mymodule.test()')
                     except Exception as e:
                         error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Insert Authority",
-                            "message": error,
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(400, "Insert Authority", error, start_time)
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Insert Authority",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Insert Authority", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Insert Authority",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Insert Authority", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Insert Authority",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
-
+            result = ResponseApi().error_response(400, "Insert Authority", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response
 
@@ -168,48 +108,20 @@ class AuthorityController(Resource):
                             Authority.update(data)
                             db.session.commit()
                             resultData.append(data)
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Update Authority",
-                            "message": "Update Authority Succes",
-                            "result": resultData
-                        }
+                        
+                        result = ResponseApi().error_response(200, "Update Authority", "Update Authority Succes", start_time, resultData)
                         # print(result)
                         # pdb.run('mymodule.test()')
                     except Exception as e:
                         error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Update Authority",
-                            "message": error,
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(400, "Update Authority", error, start_time)
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Update Authority",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Update Authority", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Update Authority",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Update Authority", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Update Authority",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }    
+            result = ResponseApi().error_response(400, "Update Authority", "Authentication signature calculation is wrong", start_time)
+            
         response = ResponseApi().response_api(result)
         return response
 
@@ -246,46 +158,17 @@ class AuthorityController(Resource):
                                     "name_authority" : Authority_value['name_authority'],
                                 }
                                 resultData.append(data)
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Delete Authority",
-                            "message": "Delete Authority Succes",
-                            "result": resultData
-                        }
+                        
+                        result = ResponseApi().error_response(200, "Delete Authority", "Delete Authority Succes", start_time, resultData)
                         
                     except Exception as e:
                         error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Delete Authority",
-                            "message": error,
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(400, "Delete Authority", error, start_time)
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Delete Authority",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Delete Authority", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Update Authority",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Delete Authority", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Delete Authority",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
+            result = ResponseApi().error_response(400, "Delete Authority", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response

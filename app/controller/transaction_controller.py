@@ -30,46 +30,16 @@ class TransactionController(Resource):
                             Transaction = TransactionModels.query.filter_by(id=id_transaction).first()
                             data = transactions_schema.dump(Transaction)
                         
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Get Transaction",
-                            "message": "Get Transaction Succes",
-                            "result": data
-                        }
+                        result = ResponseApi().error_response(200, "Get Transaction", "Get Transaction Succes", start_time, data)
                     except Exception as e:
                         error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Get Transaction",
-                            "message": error,
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(400, "Get Transaction", error, start_time) 
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Get Transaction",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Get Transaction", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Get Transaction",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Get Transaction", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Get Transaction",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
+            result = ResponseApi().error_response(400, "Get Transaction", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response
     
@@ -101,50 +71,21 @@ class TransactionController(Resource):
                                 "date_time" : date_time,
                                 "amount_of_charge" : amount_of_charge,
                             }
-                        resultData.append(data)
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Insert Transasction",
-                            "message": "Insert Transasction Succes",
-                            "result": resultData
-                        }    
+                            resultData.append(data)
+                        
+                        result = ResponseApi().error_response(200, "Insert Transaction", "Insert Transaction Succes", start_time, resultData) 
                         # print(result)
                         # pdb.run('mymodule.test()')
 
                     except Exception as e:
                         error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Insert Transasction",
-                            "message": error,
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(400, "Insert Transaction", error, start_time) 
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Insert Transasction",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Insert Transaction", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Insert Transaction",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Insert Transaction", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Insert Transaction",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
+            result = ResponseApi().error_response(400, "Insert Transaction", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response
         
@@ -178,48 +119,19 @@ class TransactionController(Resource):
                             Transaction.update(data)
                             db.session.commit()
                             resultData.append(data)
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Update Transaction",
-                            "message": "Update Transaction Succes",
-                            "result": resultData
-                        }
+                        
+                        result = ResponseApi().error_response(200, "Update Transaction", "Update Transaction Succes", start_time, resultData)
                         # print(result)
                         # pdb.run('mymodule.test()')
                     except Exception as e:
                         error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Update Transaction",
-                            "message": error,
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(400, "Update Transaction", error, start_time) 
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Update Transaction",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Update Transaction", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Update Transaction",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Update Transaction", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Update Transaction",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
+            result = ResponseApi().error_response(400, "Update Transaction", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response
 
@@ -266,45 +178,16 @@ class TransactionController(Resource):
                                     "amount_of_charge" : transaction_value['amount_of_charge'],
                                 }
                                 resultData.append(data)
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Delete Transaction",
-                            "message": "Delete Transaction Succes",
-                            "result": resultData
-                        }
+                        
+                        result = ResponseApi().error_response(200, "Delete Transaction", "Delete Transaction Succes", start_time, resultData)
                     except Exception as e:
                         error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Delete Transaction",
-                            "message": error,
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(400, "Delete Transaction", error, start_time) 
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Delete Transaction",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Delete Transaction", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Update Transaction",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Delete Transaction", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Delete Transaction",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
+            result = ResponseApi().error_response(400, "Delete Transaction", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response

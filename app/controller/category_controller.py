@@ -50,46 +50,16 @@ class CategoryController(Resource):
                             }
                             resultData.append(data)
                         
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Get Category",
-                            "message": "Get Category Succes",
-                            "result": resultData
-                        }
+                        result = ResponseApi().error_response(200, "Get Category", "Get Category Succes", start_time, resultData)
                     except Exception as e:
-                        # error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Get Category",
-                            "message": "Failed Get Data",
-                            "result": {}
-                        }
+                        error  = str(e)
+                        result = ResponseApi().error_response(400, "Get Category", error, start_time)
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Get Category",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Get Category", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Get Category",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Get Category", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Get Category",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
+            result = ResponseApi().error_response(400, "Get Category", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response
     
@@ -114,47 +84,17 @@ class CategoryController(Resource):
                                 "name" : name_category,
                             }
                             resultData.append(data)
-                        
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Insert Category",
-                            "message": "Insert Category Succes",
-                            "result": resultData
-                        }
+                            
+                        result = ResponseApi().error_response(200, "Insert Category", "Insert Category Succes", start_time, resultData)
                     except Exception as e:
                         error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Insert Category",
-                            "message": error,
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(400, "Insert Category", error, start_time)
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Insert Category",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Insert Category", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Insert Category",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Insert Category", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Insert Category",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
+            result = ResponseApi().error_response(400, "Insert Category", "Authentication signature calculation is wrong", start_time)
         
         response = ResponseApi().response_api(result)
         return response
@@ -180,47 +120,16 @@ class CategoryController(Resource):
                             db.session.commit()
                             resultData.append(data)
                         
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Update Category",
-                            "message": "Update Category Succes",
-                            "result": resultData
-                        }
+                        result = ResponseApi().error_response(200, "Update Category", "Update Category Succes", start_time, resultData)
                     except Exception as e:
                         error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Update Category",
-                            "message": error,
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(400, "Update Category", error, start_time)
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Update Category",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Update Category", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Update Category",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Update Category", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Update Category",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
-        
+            result = ResponseApi().error_response(400, "Update Category", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response
     
@@ -257,46 +166,16 @@ class CategoryController(Resource):
                                     "name" : category_value['name'],
                                 }
                                 resultData.append(data)
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Delete Category",
-                            "message": "Delete Category Succes",
-                            "result": resultData
-                        }
+                        result = ResponseApi().error_response(200, "Delete Category", "Delete Category Succes", start_time, resultData)
                         
                     except Exception as e:
                         error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Delete Category",
-                            "message": error,
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(400, "Delete Category", error, start_time)
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Delete Category",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Delete Category", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Update Category",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Delete Category", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Delete Category",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
+            result = ResponseApi().error_response(400, "Delete Category", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response

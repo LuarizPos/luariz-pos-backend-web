@@ -28,53 +28,22 @@ class UsersController(Resource):
                     user = UsersModel.query.filter_by(email=email).first()
                     if user:
                         user_response = user_schema.dump(user)
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Get Users",
-                            "message": "Succes Get Users",
-                            "result": {
-                                "id":user_response['id'],
-                                "name":user_response['name'],
-                                "email":user_response['email'],
-                                "role_id":user_response['user_role_id'],
-                                "token":user_response['token'],
-                            }
+                        data = {
+                            "id":user_response['id'],
+                            "name":user_response['name'],
+                            "email":user_response['email'],
+                            "role_id":user_response['user_role_id'],
+                            "token":user_response['token'],
                         }
+                        result = ResponseApi().error_response(200, "Get User", "Get User Succes", start_time, data)
                     else:
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Get Users",
-                            "message": "Your account email not found",
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(400, "Get User", "Your account email not found", start_time)
                  else:
-                    result = {
-                            "code" : validation['code'],
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Get Users",
-                            "message": validation['message'],
-                            "result": {}
-                        }
-
+                    result = ResponseApi().error_response(validation['code'], "Get User", validation['message'], start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Get Users",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
-            
+                result = ResponseApi().error_response(cek_session['code'], "Get User", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Get Users",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
+            result = ResponseApi().error_response(400, "Get Users", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response
     
@@ -96,49 +65,20 @@ class UsersController(Resource):
                         new_user = UsersModel(input_data['name'], input_data['email'] , input_data['no_telp'], input_data['password'], input_data['role_id'], 'null', input_data['id_company'], input_data['address'],"")
                         db.session.add(new_user)
                         db.session.commit()
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Register",
-                            "message": "Register Succes",
-                            "result": {
-                                "name" : input_data['name'],
-                                "email" : input_data['email']
-                            }
+                        data = {
+                            "name" : input_data['name'],
+                            "email" : input_data['email']
                         }
+                        result = ResponseApi().error_response(200, "Register", "Register Succes", start_time, data)
                     else:
-                        result = {
-                            "code" : validation['code'],
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Register",
-                            "message": validation['message'],
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(validation['code'], "Logout", validation['message'], start_time)
                 except Exception as e:
                     error  = str(e)
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Register",
-                        "message": error,
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Register", error, start_time) 
             else:
-                result = {
-                    "code" : 400,
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Register",
-                    "message": "Form Request Is Empty",
-                    "result": {}
-                }
+                result = ResponseApi().error_response(400, "Register", "Form Request Is Empty", start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Register",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
+            result = ResponseApi().error_response(400, "Register", "Authentication signature calculation is wrong", start_time)
         
         response = ResponseApi().response_api(result)
         return jsonify(response)
@@ -172,83 +112,36 @@ class UsersController(Resource):
                                 encode_token = Helpers().encode_token(data_user)
                                 update_session = self.update_session_user(user_response['id'],encode_token,"Active")
                                 if update_session: 
-                                    result = {
-                                        "code" : 200,
-                                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                                        "message": "Succes Login",
-                                        "endpoint": "Login",
-                                        "result": {
-                                            "name":update_session['name'],
-                                            "email":update_session['email'],
-                                            "role_id":update_session['user_role_id'],
-                                            "token":update_session['token'],
-                                        }
+                                    data = {
+                                        "name":update_session['name'],
+                                        "email":update_session['email'],
+                                        "role_id":update_session['user_role_id'],
+                                        "token":update_session['token'],
                                     }
+                                    result = ResponseApi().error_response(200, "Login", "Login Succes", start_time, data)
                                 else:    
-                                    result = {
-                                        "code" : 400,
-                                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                                        "endpoint": "Login",
-                                        "message": "Failed Session",
-                                        "result": {}
-                                    }
+                                    result = ResponseApi().error_response(400, "Login", "Failed Session", start_time)
                             else:
-                                result = {
-                                    "code" : 400,
-                                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                                    "endpoint": "Login",
-                                    "message": "Your account email or password is incorrect",
-                                    "result": {}
-                                }
+                                
+                                result = ResponseApi().error_response(400, "Login", "Your account email is incorrect", start_time)
                         else:
-                            result = {
-                                "code" : 400,
-                                "SpeedTime" : ResponseApi().speed_response(start_time),
-                                "endpoint": "Login",
-                                "message": "Your account email or password is incorrect",
-                                "result": {}
-                            }
+                            
+                            result = ResponseApi().error_response(400, "Login", "Your account email is incorrect", start_time)
                     else:
-                        result = {
-                            "code" : validation['code'],
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Login",
-                            "message": validation['message'],
-                            "result": {}
-                        }
-
+                        result = ResponseApi().error_response(validation['code'], "Logout", validation['message'], start_time)
                 except Exception as e:
                     error  = str(e)
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Login",
-                        "message": error,
-                        "result": {}
-                    }
-            
+                    result = ResponseApi().error_response(400, "Login", error, start_time) 
             else:
-                result = {
-                    "code" : 400,
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Login",
-                    "message": "Form Request Is Empty",
-                    "result": {}
-                }
-
+                result = ResponseApi().error_response(400, "Login", "Form Request Is Empty", start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Login",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
+            result = ResponseApi().error_response(400, "Login", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result) 
         return response
 
     def logout_user(self,param):
         start_time = ResponseApi().microtime(True)
+        result ={}
         if Helpers().cek_auth(param):
             form_req = param['form']    
             if form_req:
@@ -271,67 +164,28 @@ class UsersController(Resource):
                             encode_token = Helpers().encode_token(data_user)
                             update_session = self.update_session_user(user_response['id'],encode_token,"Logout")
                             if update_session: 
-                                result = {
-                                    "code" : 200,
-                                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                                    "message": "Succes Logout",
-                                    "endpoint": "Logout",
-                                    "result": {
-                                        "name":update_session['name'],
-                                        "email":update_session['email'],
-                                        "role_id":update_session['user_role_id'],
-                                        "token":update_session['token'],
-                                    }
+                                data = {
+                                    "name":update_session['name'],
+                                    "email":update_session['email'],
+                                    "role_id":update_session['user_role_id'],
+                                    "token":update_session['token'],
                                 }
+                                result = ResponseApi().error_response(200, "Logout", "Logout Succes", start_time, data)
                         else:
-                            result = {
-                                "code" : 400,
-                                "SpeedTime" : ResponseApi().speed_response(start_time),
-                                "endpoint": "Logout",
-                                "message": "Your account email is incorrect",
-                                "result": {}
-                            }
+                            result = ResponseApi().error_response(400, "Logout", "Your account email is incorrect", start_time)
                     else:
-                        result = {
-                            "code" : validation['code'],
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Logout",
-                            "message": validation['message'],
-                            "result": {}
-                        }
-
+                        result = ResponseApi().error_response(validation['code'], "Logout", validation['message'], start_time)
                 except Exception as e:
                     error  = str(e)
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Logout",
-                        "message": error,
-                        "result": {}
-                    }
-            
+                    result = ResponseApi().error_response(400, "Logout", error, start_time) 
             else:
-                result = {
-                    "code" : 400,
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Logout",
-                    "message": "Form Request Is Empty",
-                    "result": {}
-                }
-
+                result = ResponseApi().error_response(400, "Logout", "Form Request Is Empty", start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Logout",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
+            result = ResponseApi().error_response(400, "Logout", "Authentication signature calculation is wrong", start_time)
 
         response = ResponseApi().response_api(result)
         return response
-
-    
+ 
     def update_session_user(self,id,token,status):
         user = UsersModel.query.get(id)
         user.token = token

@@ -11,7 +11,7 @@ carts_schema = CartSchema(many=True)
 
 class CartController(Resource):
 
-    def get_Cart(self,param):
+    def get_cart(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
             cek_session = Helpers().cek_session(param)
@@ -28,46 +28,16 @@ class CartController(Resource):
                             Cart = CartModels.query.filter_by(id=id_cart).first()
                             data = carts_schema.dump(Cart)
                         
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Get Cart",
-                            "message": "Get Cart Succes",
-                            "result": data
-                        }
+                        result = ResponseApi().error_response(200, "Delete Cart", "Get Cart Succes", start_time, data)
                     except Exception as e:
                         error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Get Cart",
-                            "message": error,
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(400, "Get Cart", error, start_time)
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Get Cart",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Get Cart", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Get Cart",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Get Cart", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Get Cart",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
+            result = ResponseApi().error_response(400, "Get Cart", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response
 
@@ -95,49 +65,18 @@ class CartController(Resource):
                                 "price" : price,
                             }    
                             resultData.append(data)
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Insert Cart",
-                            "message": "Insert Cart Succes",
-                            "result": resultData
-                        }    
+                        result = ResponseApi().error_response(200, "Insert Cart", "Insert Cart Succes", start_time, resultData)
                         # print(result)
                         # pdb.run('mymodule.test()')
                     except Exception as e:
                         error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Insert Cart",
-                            "message": error,
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(400, "Insert Cart", error, start_time)
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Insert Cart",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Insert Cart", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Insert Cart",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Insert Cart", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "endpoint": "Insert Cart",
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
-
+            result = ResponseApi().error_response(400, "Insert Cart", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response
 
@@ -173,45 +112,21 @@ class CartController(Resource):
                             "message": "Update Cart Succes",
                             "result": resultData
                         }
+                        result = ResponseApi().error_response(200, "Update Cart", "Cart Update Succes", start_time, resultData)
                         # print(result)
                         # pdb.run('mymodule.test()')
                     except Exception as e:
                         error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Update Cart",
-                            "message": error,
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(400, "Update Cart", error, start_time)
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Update Cart",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Update Cart", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Update Cart",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Update Cart", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "endpoint": "Update Cart",
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }    
+            result = ResponseApi().error_response(400, "Update Cart", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response
         
-
     def delete_cart(self,param):
         start_time = ResponseApi().microtime(True)
         if Helpers().cek_auth(param):
@@ -251,45 +166,16 @@ class CartController(Resource):
                                     "price" : Cart_value['price'],
                                 }
                                 resultData.append(data)
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Delete Cart",
-                            "message": "Delete Cart Succes",
-                            "result": resultData
-                        }
+                        
+                        result = ResponseApi().error_response(200, "Delete Cart", "Cart Delete Succes", start_time, resultData)
                     except Exception as e:
                         error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Delete Cart",
-                            "message": error,
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(400, "Delete Cart", error, start_time)
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Delete Cart",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Delete Cart", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Update Cart",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Delete Cart", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Delete Cart",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
+            result = ResponseApi().error_response(400, "Delete Cart", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response

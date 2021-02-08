@@ -28,46 +28,16 @@ class ComponyController(Resource):
                             Company = CompanyModels.query.filter_by(id=id_company).first()
                             data = companys_schema.dump(Company)
                         
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Get Company",
-                            "message": "Get Company Succes",
-                            "result": data
-                        }
+                        result = ResponseApi().error_response(200, "Get Company", "Get Company Succes", start_time, data)
                     except Exception as e:
                         error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Get Company",
-                            "message": error,
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(400, "Get Company", error, start_time)
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Get Company",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Get Company", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Get Company",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Get Company", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Get Company",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
+            result = ResponseApi().error_response(400, "Get Company", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response
         
@@ -102,50 +72,18 @@ class ComponyController(Resource):
                                 "website" : website_company
                             }    
                             resultData.append(data)
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Insert Company",
-                            "message": "Insert Company Succes",
-                            "result": resultData
-                        }    
+                        result = ResponseApi().error_response(200, "Insert Company", "Insert Company Succes", start_time, resultData)
                         # print(result)
                         # pdb.run('mymodule.test()')
                     except Exception as e:
                         error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Insert Company",
-                            "message": error,
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(400, "Insert Company", error, start_time)
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Insert Company",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Insert Company", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Insert Company",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
-        
+                result = ResponseApi().error_response(cek_session['code'], "Insert Company", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Insert Company",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
-
+            result = ResponseApi().error_response(400, "Insert Company", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response
 
@@ -180,48 +118,19 @@ class ComponyController(Resource):
                             Company.update(data)
                             db.session.commit()
                             resultData.append(data)
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Update Company",
-                            "message": "Update Company Succes",
-                            "result": resultData
-                        }
+                        
+                        result = ResponseApi().error_response(200, "Update Company", "Update Company Succes", start_time, resultData)
                         # print(result)
                         # pdb.run('mymodule.test()')
                     except Exception as e:
                         error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Update Company",
-                            "message": error,
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(400, "Update Company", error, start_time)
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Update Company",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Update Company", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Update Company",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Update Company", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "endpoint": "Update Company",
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }    
+            result = ResponseApi().error_response(400, "Update Company", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response
 
@@ -270,47 +179,17 @@ class ComponyController(Resource):
                                     "website" : Company_value['website'],
                                 }
                                 resultData.append(data)
-                        result = {
-                            "code" : 200,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Delete Company",
-                            "message": "Delete Company Succes",
-                            "result": resultData
-                        }
-                        
+
+                        result = ResponseApi().error_response(200, "Delete Company", "Delete Company Succes", start_time, resultData)
                     except Exception as e:
                         error  = str(e)
-                        result = {
-                            "code" : 400,
-                            "SpeedTime" : ResponseApi().speed_response(start_time),
-                            "endpoint": "Delete Company",
-                            "message": error,
-                            "result": {}
-                        }
+                        result = ResponseApi().error_response(400, "Delete Company", error, start_time)
                 else:
-                    result = {
-                        "code" : 400,
-                        "SpeedTime" : ResponseApi().speed_response(start_time),
-                        "endpoint": "Delete Company",
-                        "message": "Form Request Is Empty",
-                        "result": {}
-                    }
+                    result = ResponseApi().error_response(400, "Delete Company", "Form Request Is Empty", start_time)
             else:
-                result = {
-                    "code" : cek_session['code'],
-                    "SpeedTime" : ResponseApi().speed_response(start_time),
-                    "endpoint": "Update Company",
-                    "message": cek_session['message'],
-                    "result": {}
-                }
+                result = ResponseApi().error_response(cek_session['code'], "Delete Company", cek_session['message'], start_time)
         else:
-            result = {
-                "code" : 400,
-                "endpoint": "Delete Company",
-                "SpeedTime" : ResponseApi().speed_response(start_time),
-                "message": "Authentication signature calculation is wrong",
-                "result": {}
-            }
+            result = ResponseApi().error_response(400, "Delete Company", "Authentication signature calculation is wrong", start_time)
         response = ResponseApi().response_api(result)
         return response
         
