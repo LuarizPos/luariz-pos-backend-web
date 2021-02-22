@@ -120,6 +120,9 @@ class ProductController(Resource):
                             description = form_value['description']
                             price = form_value['price']
                             stock = form_value['stock']
+                            id_company = cek_session['data']['id_company']
+                            # print(id_company)
+                            # pdb.run('mymodule.test()')
                             image = ""
                             id_cloudinary = ''
                             id_imagekit = ''
@@ -170,7 +173,7 @@ class ProductController(Resource):
                                         response = ResponseApi().response_api(result)
                                         return response
                             
-                            new_product = ProductModels(id_category, name_product, description, image, id_cloudinary, id_imagekit , stock, price)
+                            new_product = ProductModels(id_category, id_company, name_product, description, image, id_cloudinary, id_imagekit , stock, price)
                             db.session.add(new_product)
                             db.session.commit()
                             Product = ProductModels.query.filter_by(name=name_product).first()
@@ -187,6 +190,7 @@ class ProductController(Resource):
                                 "id": data_product['id'],
                                 "name" : data_product['name'],
                                 "id_category" : data_product['id_category'],
+                                "id_company" : data_product['id_company'],
                                 "description" : data_product['description'],
                                 "image" : image,
                                 "stock" : data_product['stock'],
@@ -222,6 +226,7 @@ class ProductController(Resource):
                             name_product = form_value['name']
                             id_category = form_value['id_category']
                             description = form_value['description']
+                            id_company = cek_session['data']['id_company']
                             price = form_value['price']
                             stock = form_value['stock']
 
@@ -292,6 +297,7 @@ class ProductController(Resource):
                                 "id" : id_product,
                                 "name" : name_product,
                                 "id_category" : id_category,
+                                "id_company": id_company,
                                 "description" : description,
                                 "image" : image,
                                 'id_cloudinary': id_cloudinary,
@@ -310,6 +316,7 @@ class ProductController(Resource):
                             "stock": data_product['stock'],
                             "description": data_product['description'],
                             "id_category": data_product['id_category'],
+                            "id_company": data_product['id_company'],
                             "image": image,
                             "name": data_product['name'],
                         }

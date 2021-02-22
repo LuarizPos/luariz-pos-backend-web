@@ -74,12 +74,14 @@ class CategoryController(Resource):
                     try:
                         for form_value in form_req:
                             name_category = form_value['name']
-                            new_category = CategoryModels(name_category)
+                            id_company = cek_session['data']['id_company']
+                            new_category = CategoryModels(name_category,id_company)
                             db.session.add(new_category)
                             db.session.commit()
                             Category = CategoryModels.query.filter_by(name=name_category).first()
                             data_category = category_schema.dump(Category)
                             data = {
+                                "id_company" : data_category['id_company'],
                                 "id_category" : data_category['id'],
                                 "name" : name_category,
                             }
@@ -107,12 +109,14 @@ class CategoryController(Resource):
                 form_req = param['form']
                 resultData = []
                 if form_req:
-                    try:
+                    # try:
                         for form_value in form_req:
                             id_category = form_value['id_category']
+                            id_company = cek_session['data']['id_company']
                             name_category = form_value['name']
                             data = {
                                 "id" : id_category,
+                                "id_company":id_company,
                                 "name" : name_category,
                             }
                             Category = CategoryModels.query.filter_by(id=id_category)
@@ -121,9 +125,9 @@ class CategoryController(Resource):
                             resultData.append(data)
                         
                         result = ResponseApi().error_response(200, "Update Category", "Update Category Succes", start_time, resultData)
-                    except Exception as e:
-                        error  = str(e)
-                        result = ResponseApi().error_response(400, "Update Category", error, start_time)
+                    # except Exception as e:
+                    #     error  = str(e)
+                    #     result = ResponseApi().error_response(400, "Update Category", error, start_time)
                 else:
                     result = ResponseApi().error_response(400, "Update Category", "Form Request Is Empty", start_time)
             else:

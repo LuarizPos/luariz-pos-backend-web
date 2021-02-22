@@ -3,16 +3,19 @@ from flask_restful import Resource
 from app.helpers.helpers import Helpers
 from app.helpers.response import ResponseApi
 from app.helpers.validation import ValidationInput
+from app.helpers.send_email import SendEmail
 from app.manage import db
 from datetime import datetime, timedelta
 from app.models.users_models import UsersModel, UsersSchema
+from app.models.company_models import CompanyModels, CompanySchema
 import json
 import os
 import pdb
 
 user_schema = UsersSchema()
 users_schema = UsersSchema(many=True)
-
+company_schema = CompanySchema()
+companys_schema = CompanySchema(many=True)
 
 class UsersController(Resource):
     def get_user(self,param):
@@ -62,14 +65,21 @@ class UsersController(Resource):
                     validation = ValidationInput().validation_register(form_req)
                     if validation['code'] == 200:
                         input_data = validation['result']
-                        new_user = UsersModel(input_data['name'], input_data['email'] , input_data['no_telp'], input_data['password'], input_data['role_id'], 'null', input_data['id_company'], input_data['address'],"")
-                        db.session.add(new_user)
-                        db.session.commit()
-                        data = {
-                            "name" : input_data['name'],
-                            "email" : input_data['email']
-                        }
-                        result = ResponseApi().error_response(200, "Register", "Register Succes", start_time, data)
+                        Company = CompanyModels.query.filter_by(name=input_data["company_name"]).first()
+                        data_company = company_schema.dump(Company)
+                        if data_company:
+                            # print() 
+                            # pdb.run('mymodule.test()')
+                            new_user = UsersModel(input_data['name'], input_data['email'] , input_data['no_telp'], input_data['password'], input_data['role_id'], 'null', data_company["id"], input_data['address'],"")
+                            db.session.add(new_user)
+                            db.session.commit()
+                            data = {
+                                "name" : input_data['name'],
+                                "email" : input_data['email']
+                            }
+                            result = ResponseApi().error_response(200, "Register", "Register Succes", start_time, data)
+                        else:
+                            result = ResponseApi().error_response(400, "Register", "Company Not Found", start_time)
                     else:
                         result = ResponseApi().error_response(validation['code'], "Logout", validation['message'], start_time)
                 except Exception as e:
@@ -95,13 +105,10 @@ class UsersController(Resource):
                         email = input_data['email']
                         password = input_data['password']
                         user = UsersModel.query.filter_by(email=email).first()
-                        
                         if user:
                             user_response = user_schema.dump(user)
-                            
                             if user_response['password'] == password:
-                                expired_session = (datetime.now() + timedelta(minutes = int(os.getenv('SESSION_EXPIRED'))))
-                                
+                                expired_session = (datetime.now() + timedelta(minutes = int(os.getenv('SESSION_EXPIRED'))))   
                                 data_user = {
                                     "name":user_response['name'],
                                     "email":user_response['email'],
@@ -112,11 +119,16 @@ class UsersController(Resource):
                                 encode_token = Helpers().encode_token(data_user)
                                 update_session = self.update_session_user(user_response['id'],encode_token,"Active")
                                 if update_session: 
+                                    Company = CompanyModels.query.filter_by(id=user_response["id_company"]).first()
+                                    data_company = company_schema.dump(Company)
+                                    # print(data_company['name'])
+                                    # pdb.run('mymodule.test()')
                                     data = {
                                         "name":update_session['name'],
                                         "email":update_session['email'],
                                         "role_id":update_session['user_role_id'],
                                         "token":update_session['token'],
+                                        "company":data_company
                                     }
                                     result = ResponseApi().error_response(200, "Login", "Login Succes", start_time, data)
                                 else:    
@@ -192,5 +204,12 @@ class UsersController(Resource):
         user.status = status
         db.session.commit()
         return user_schema.dump(user)
+
+    def get_email(self,params):
+        paramss = {
+            "sample":"halo",
+        }
+        get = SendEmail().send_email(paramss)
+        return get
         
     

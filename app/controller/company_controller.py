@@ -26,7 +26,7 @@ class ComponyController(Resource):
                             data = companys_schema.dump(Company)
                         else:
                             Company = CompanyModels.query.filter_by(id=id_company).first()
-                            data = companys_schema.dump(Company)
+                            data = company_schema.dump(Company)
                         
                         result = ResponseApi().error_response(200, "Get Company", "Get Company Succes", start_time, data)
                     except Exception as e:

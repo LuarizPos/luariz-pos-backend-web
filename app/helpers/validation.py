@@ -34,10 +34,10 @@ class ValidationInput(Resource):
                 "message": "invalid is password",
                 "result": []
             }
-        elif param['id_company'] == '':
+        elif param['company_name'] == '':
             result = {
                 "code" : 400,
-                "message": "id_company is required",
+                "message": "company_name is required",
                 "result": []
             }
         elif param['address'] == '':
@@ -61,7 +61,7 @@ class ValidationInput(Resource):
                     'email': param['email'],
                     'password': hashlib.md5(param['password_1'].encode('utf-8')).hexdigest(),
                     'role_id': param['role_id'],
-                    'id_company': param['id_company'],
+                    'company_name': param['company_name'],
                     'address': param['address'],
                     "no_telp": param['no_telp'],
                 }

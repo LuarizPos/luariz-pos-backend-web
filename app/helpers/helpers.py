@@ -66,7 +66,8 @@ class Helpers(Resource):
         if expired_session <= date_now:
             result = {
                 "code":440,
-                "message": "Session Has Expired and Must Log in Again"        
+                "message": "Session Has Expired and Must Log in Again",
+                "data":{}
             }
         else:
             user = UsersModel.query.filter_by(email=email_token).first()
@@ -75,12 +76,14 @@ class Helpers(Resource):
             if status_token == status_db:
                 result = {
                     "code":200,
-                    "message": "Session Active"        
+                    "message": "Session Active",
+                    "data":user_response
                 }
             else:
                 result = {
                     "code":440,
-                    "message": "Session Is Logout"        
+                    "message": "Session Is Logout",
+                    "data":{}
                 }
 
         return result

@@ -5,6 +5,7 @@ class ProductModels(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     id_category = db.Column(db.Integer)
+    id_company = db.Column(db.Integer)
     name = db.Column(db.String(250), index=True, unique=True)
     description = db.Column(db.String(500))
     image = db.Column(db.String(500))
@@ -13,8 +14,9 @@ class ProductModels(db.Model):
     stock = db.Column(db.Integer)
     price = db.Column(db.Integer)
 
-    def __init__(self, id_category, name, description, image, id_cloudinary, id_imagekit, stock, price):
+    def __init__(self, id_category, id_company, name, description, image, id_cloudinary, id_imagekit, stock, price):
         self.id_category = id_category
+        self.id_company = id_company
         self.id_imagekit = id_imagekit
         self.name = name
         self.description = description
@@ -26,4 +28,4 @@ class ProductModels(db.Model):
 
 class ProductSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'id_category', 'name', 'description', 'image', 'id_cloudinary', 'id_imagekit', 'stock', 'price' )
+        fields = ('id', 'id_category', 'id_company', 'name', 'description', 'image', 'id_cloudinary', 'id_imagekit', 'stock', 'price' )
