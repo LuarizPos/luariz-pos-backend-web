@@ -11,6 +11,7 @@ from app.models.company_models import CompanyModels, CompanySchema
 import json
 import os
 import pdb
+import hashlib
 
 user_schema = UsersSchema()
 users_schema = UsersSchema(many=True)
@@ -65,21 +66,30 @@ class UsersController(Resource):
                     validation = ValidationInput().validation_register(form_req)
                     if validation['code'] == 200:
                         input_data = validation['result']
-                        Company = CompanyModels.query.filter_by(name=input_data["company_name"]).first()
-                        data_company = company_schema.dump(Company)
-                        if data_company:
+                        Companys = CompanyModels.query.filter_by(name=input_data["company_name"]).first()
+                        data_companys = company_schema.dump(Companys)
+                        if not data_companys:
                             # print() 
                             # pdb.run('mymodule.test()')
-                            new_user = UsersModel(input_data['name'], input_data['email'] , input_data['no_telp'], input_data['password'], input_data['role_id'], 'null', data_company["id"], input_data['address'],"")
-                            db.session.add(new_user)
+                            new_company = CompanyModels(input_data['company_name'], input_data['address'], input_data['no_telp'], 
+                                    '', '', input_data['email'], '')
+                            db.session.add(new_company)
                             db.session.commit()
-                            data = {
-                                "name" : input_data['name'],
-                                "email" : input_data['email']
-                            }
-                            result = ResponseApi().error_response(200, "Register", "Register Succes", start_time, data)
+                            Company = CompanyModels.query.filter_by(name=input_data["company_name"]).first()
+                            data_company = company_schema.dump(Company)
+                            if data_company:
+                                new_user = UsersModel(input_data['name'], input_data['email'] , input_data['no_telp'], input_data['password'], input_data['role_id'], 'null', data_company["id"], input_data['address'],"")
+                                db.session.add(new_user)
+                                db.session.commit()
+                                data = {
+                                    "name" : input_data['name'],
+                                    "email" : input_data['email']
+                                }
+                                result = ResponseApi().error_response(200, "Register", "Register Succes", start_time, data)
+                            else:
+                                result = ResponseApi().error_response(400, "Register", "Company cannot be saved", start_time)
                         else:
-                            result = ResponseApi().error_response(400, "Register", "Company Not Found", start_time)
+                            result = ResponseApi().error_response(400, "Register", "Company Already Exist Please Change Your Name Company", start_time)
                     else:
                         result = ResponseApi().error_response(validation['code'], "Logout", validation['message'], start_time)
                 except Exception as e:
@@ -197,7 +207,60 @@ class UsersController(Resource):
 
         response = ResponseApi().response_api(result)
         return response
- 
+    
+    def update_user(self,param):
+        start_time = ResponseApi().microtime(True)
+        if Helpers().cek_auth(param):
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
+                form_req = param['form']
+                resultData = []
+                data = {}
+                if form_req:
+                    try:
+                        for form_value in form_req:
+                            id_user = form_value['id_user']
+                            name = form_value['name']
+                            old_password = form_value['old_password']
+                            new_password = form_value['new_password']
+                            no_telp = form_value['no_telp']
+                            role_id = form_value['role_id']
+                            address = form_value['address']
+                            email = form_value['email']
+                            data['name'] = name
+                            data['user_role_id'] = role_id
+                            data['no_telp'] = no_telp
+                            data['address'] = address
+                            data['email'] = email
+                                
+                            user = UsersModel.query.filter_by(id=id_user).first()
+                            user_response = user_schema.dump(user)
+                            if old_password:
+                                if hashlib.md5(old_password.encode('utf-8')).hexdigest() == user_response['password']:
+                                    data['password'] = hashlib.md5(new_password.encode('utf-8')).hexdigest()
+                                else:
+                                    result = ResponseApi().error_response(400, "Update User", "Old Password is Wrong", start_time)
+                                    response = ResponseApi().response_api(result)
+                                    return response
+                            
+                            Users = UsersModel.query.filter_by(id=id_user)
+                            Users.update(data)
+                            db.session.commit()
+                            resultData.append(data)
+                            result = ResponseApi().error_response(200, "Update Company", "Update Company Succes", start_time, resultData)
+                    except Exception as e:
+                        error  = str(e)
+                        result = ResponseApi().error_response(400, "Update User", error, start_time)
+                else:
+                    result = ResponseApi().error_response(400, "Update User", "Form Request Is Empty", start_time)
+
+            else:
+                result = ResponseApi().error_response(cek_session['code'], "Update User", cek_session['message'], start_time)
+        else:
+            result = ResponseApi().error_response(400, "Update User", "Authentication signature calculation is wrong", start_time)
+        response = ResponseApi().response_api(result)
+        return response
+
     def update_session_user(self,id,token,status):
         user = UsersModel.query.get(id)
         user.token = token

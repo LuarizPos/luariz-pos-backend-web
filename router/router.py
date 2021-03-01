@@ -39,6 +39,16 @@ def register_user():
     }
     return UsersController().register_user(param)
 
+@urls_blueprint.route('/update_user', methods=['POST'])
+def update_user():
+    param = {
+        'form':request.json['UpdateUser'],
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
+        
+    }
+    return UsersController().update_user(param)
+
 @urls_blueprint.route('/login_user', methods=['POST'])
 def login_user():
     param = {
@@ -281,3 +291,13 @@ def delete_authority():
     
     return AuthorityController().delete_authority(param)
 # ======================end router Authority ============================
+
+
+@urls_blueprint.route('/get_email', methods=['POST'])
+def get_email():
+    param = {
+        'form':request.json['GetUser'],
+        'auth':request.headers['Authorization'],
+        'token':request.headers['Token']
+    }
+    return UsersController().get_email(param)
