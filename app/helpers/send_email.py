@@ -1,5 +1,4 @@
 from flask_restful import Resource
-from sib_api_v3_sdk.rest import ApiException
 from app.manage import mail
 from flask_mail import Message
 from pprint import pprint
