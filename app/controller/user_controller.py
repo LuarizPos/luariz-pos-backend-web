@@ -12,6 +12,7 @@ import json
 import os
 import pdb
 import hashlib
+import secrets
 
 user_schema = UsersSchema()
 users_schema = UsersSchema(many=True)
@@ -69,8 +70,6 @@ class UsersController(Resource):
                         Companys = CompanyModels.query.filter_by(name=input_data["company_name"]).first()
                         data_companys = company_schema.dump(Companys)
                         if not data_companys:
-                            # print() 
-                            # pdb.run('mymodule.test()')
                             new_company = CompanyModels(input_data['company_name'], input_data['address'], input_data['no_telp'], 
                                     '', '', input_data['email'], '')
                             db.session.add(new_company)
@@ -78,14 +77,19 @@ class UsersController(Resource):
                             Company = CompanyModels.query.filter_by(name=input_data["company_name"]).first()
                             data_company = company_schema.dump(Company)
                             if data_company:
-                                new_user = UsersModel(input_data['name'], input_data['email'] , input_data['no_telp'], input_data['password'], input_data['role_id'], 'null', data_company["id"], input_data['address'],"")
+                                code_activated = secrets.token_urlsafe(16)
+                                new_user = UsersModel(input_data['name'], input_data['email'] , input_data['no_telp'], input_data['password'], input_data['role_id'], 'null', data_company["id"], input_data['address'],'not_confirm',code_activated)
                                 db.session.add(new_user)
                                 db.session.commit()
+                                encode_validation = Helpers().create_session(input_data,'not_confirm',code_activated)
+                                SendEmail().send_email_confirm_register(input_data,encode_validation)
+                                # print(encode_validation)
+                                # pdb.run('mymodule.test()')
                                 data = {
                                     "name" : input_data['name'],
                                     "email" : input_data['email']
                                 }
-                                result = ResponseApi().error_response(200, "Register", "Register Succes", start_time, data)
+                                result = ResponseApi().error_response(200, "Register", "Register Succes Cek Your Email", start_time, data)
                             else:
                                 result = ResponseApi().error_response(400, "Register", "Company cannot be saved", start_time)
                         else:
@@ -117,35 +121,29 @@ class UsersController(Resource):
                         user = UsersModel.query.filter_by(email=email).first()
                         if user:
                             user_response = user_schema.dump(user)
-                            if user_response['password'] == password:
-                                expired_session = (datetime.now() + timedelta(minutes = int(os.getenv('SESSION_EXPIRED'))))   
-                                data_user = {
-                                    "name":user_response['name'],
-                                    "email":user_response['email'],
-                                    "role_id":user_response['user_role_id'],
-                                    "expired_session":expired_session.strftime('%Y/%m/%d %H:%M:%S'),
-                                    "status":"Active"
-                                }
-                                encode_token = Helpers().encode_token(data_user)
-                                update_session = self.update_session_user(user_response['id'],encode_token,"Active")
-                                if update_session: 
-                                    Company = CompanyModels.query.filter_by(id=user_response["id_company"]).first()
-                                    data_company = company_schema.dump(Company)
-                                    # print(data_company['name'])
-                                    # pdb.run('mymodule.test()')
-                                    data = {
-                                        "name":update_session['name'],
-                                        "email":update_session['email'],
-                                        "role_id":update_session['user_role_id'],
-                                        "token":update_session['token'],
-                                        "company":data_company
-                                    }
-                                    result = ResponseApi().error_response(200, "Login", "Login Succes", start_time, data)
-                                else:    
-                                    result = ResponseApi().error_response(400, "Login", "Failed Session", start_time)
+                            if user_response['status'] == 'not_confirm':
+                                result = ResponseApi().error_response(400, "Login", "Your account email is not verify", start_time)
                             else:
-                                
-                                result = ResponseApi().error_response(400, "Login", "Your account email is incorrect", start_time)
+                                if user_response['password'] == password:
+                                    encode_token = Helpers().create_session(user_response,'Active', user_response['code_activated'])
+                                    update_session = self.update_session_user(user_response['id'],encode_token,"Active")
+                                    if update_session: 
+                                        Company = CompanyModels.query.filter_by(id=user_response["id_company"]).first()
+                                        data_company = company_schema.dump(Company)
+                                        # print(data_company['name'])
+                                        # pdb.run('mymodule.test()')
+                                        data = {
+                                            "name":update_session['name'],
+                                            "email":update_session['email'],
+                                            "role_id":update_session['user_role_id'],
+                                            "token":update_session['token'],
+                                            "company":data_company
+                                        }
+                                        result = ResponseApi().error_response(200, "Login", "Login Succes", start_time, data)
+                                    else:    
+                                        result = ResponseApi().error_response(400, "Login", "Failed Session", start_time)
+                                else:
+                                    result = ResponseApi().error_response(400, "Login", "Your account email is incorrect", start_time)
                         else:
                             
                             result = ResponseApi().error_response(400, "Login", "Your account email is incorrect", start_time)
@@ -267,6 +265,43 @@ class UsersController(Resource):
         user.status = status
         db.session.commit()
         return user_schema.dump(user)
+    
+    def verify_account(self,param):
+            start_time = ResponseApi().microtime(True)
+        # if Helpers().cek_auth(param):
+            cek_session = Helpers().cek_session(param)
+            if cek_session['code'] == 200:
+                try:
+                    email = cek_session['data']['email']
+                    user = UsersModel.query.filter_by(email=email).first()
+                    data = {}
+                    resultData = []
+                    if user:
+                        user_response = user_schema.dump(user)
+                        if user_response['code_activated'] == cek_session['code_activated']:
+                            data['status'] = 'confirm'
+                            data['email'] = user_response['email']
+                            Users = UsersModel.query.filter_by(id=user_response['id'])
+                            Users.update(data)
+                            db.session.commit()
+                            resultData.append(data)
+                            result = ResponseApi().error_response(200, "Verify Users", "Your account email is verify", start_time, resultData)
+                        else:
+                            result = ResponseApi().error_response(400, "Verify Users", "Your account email code is wrong", start_time)
+                    else:
+                        result = ResponseApi().error_response(400, "Verify Users", "Your account email is wrong", start_time)
+                except Exception as e:
+                    error  = str(e)
+                    result = ResponseApi().error_response(400, "Verify Users", error, start_time)
+            else:
+                result = ResponseApi().error_response(cek_session['code'], "Verify Users", cek_session['message'], start_time)
+
+            # print(decode_token)
+            # pdb.run('mymodule.test()')
+        # else:
+        #     result = ResponseApi().error_response(400, "Verify Users", "Authentication signature calculation is wrong", start_time)
+            response = ResponseApi().response_api(result)
+            return response
 
     def get_email(self,params):
         paramss = {

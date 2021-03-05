@@ -1,5 +1,5 @@
 from flask_restful import Resource, Api
-from datetime import datetime, timedelta,  date
+from datetime import datetime, timedelta
 from app.models.users_models import UsersModel, UsersSchema
 import hashlib 
 import hmac
@@ -60,31 +60,59 @@ class Helpers(Resource):
         decode_token = json.loads(decode_token)
         time_session = decode_token['expired_session']
         status_token = decode_token['status']
+        code_activated = decode_token['code_activated']
         email_token = decode_token['email']
+        # print(decode_token)
+        # pdb.run('mymodule.test()')
         expired_session = datetime.strptime(time_session,"%Y/%m/%d %H:%M:%S")
         date_now = datetime.today()
         if expired_session <= date_now:
             result = {
                 "code":440,
                 "message": "Session Has Expired and Must Log in Again",
+                "time_session":"",
+                "code_activated":"",
                 "data":{}
             }
         else:
             user = UsersModel.query.filter_by(email=email_token).first()
             user_response = user_schema.dump(user)
             status_db   = user_response['status']
-            if status_token == status_db:
+            if status_db == 'confirm':
+                result = {
+                    "code":200,
+                    "message": "Account is confirm",
+                    "time_session":time_session,
+                    "code_activated":code_activated,
+                    "data":user_response
+                }
+            elif status_token == status_db:
                 result = {
                     "code":200,
                     "message": "Session Active",
+                    "time_session":time_session,
+                    "code_activated":code_activated,
                     "data":user_response
                 }
             else:
                 result = {
                     "code":440,
                     "message": "Session Is Logout",
+                    "time_session":"",
+                    "code_activated":"",
                     "data":{}
                 }
 
         return result
-        
+
+    def create_session(self,params,status,code_activated):
+        expired_session = (datetime.now() + timedelta(minutes = int(os.getenv('SESSION_EXPIRED'))))
+        data_user = {
+            "name":params['name'],
+            "email":params['email'],
+            "expired_session":expired_session.strftime('%Y/%m/%d %H:%M:%S'),
+            "status":status,
+            "code_activated":code_activated
+        }
+        encode_token = self.encode_token(data_user)
+        return encode_token
