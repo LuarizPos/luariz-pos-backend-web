@@ -1,8 +1,7 @@
-from flask_restful import Resource, Api
+from flask_restful import Resource
 from datetime import datetime, timedelta
 from app.models.users_models import UsersModel, UsersSchema
 import hashlib 
-import hmac
 import base64
 import pybase64
 import json

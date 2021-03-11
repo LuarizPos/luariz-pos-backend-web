@@ -3,8 +3,6 @@ from app.models.product_models import ProductModels, ProductSchema
 from flask_restful import Resource
 from app.helpers.helpers import Helpers
 from app.helpers.response import ResponseApi
-from app.manage import db
-from datetime import datetime
 import pdb
 
 category_schema = CategorySchema()

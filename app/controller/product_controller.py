@@ -1,7 +1,7 @@
 from app.models.product_models import ProductModels, ProductSchema
 from app.models.category_models import CategoryModels, CategorySchema
 from flask_restful import Resource
-from flask import request, jsonify
+from flask import request
 from app.helpers.helpers import Helpers
 from app.helpers.response import ResponseApi
 from app.manage import db, UseCloundiary, UseImagekit, imagekit

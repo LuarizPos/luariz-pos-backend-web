@@ -1,6 +1,5 @@
 from app.models.authority_models import AuthorityModels, AuthoritySchema
 from flask_restful import Resource
-from flask import request, jsonify
 from app.helpers.helpers import Helpers
 from app.helpers.response import ResponseApi
 from app.manage import db

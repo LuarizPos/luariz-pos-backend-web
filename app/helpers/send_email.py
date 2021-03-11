@@ -1,7 +1,6 @@
 from flask_restful import Resource
 from app.manage import mail
 from flask_mail import Message
-from pprint import pprint
 import pdb
 from flask import render_template, request
 import os
@@ -16,7 +15,7 @@ class SendEmail(Resource):
             'url_roots' : url_roots+'v1/verify_account/',
             'encode_validation' : encode_validation
         }
-        template = render_template('mail_welcome_confirm.html',content = content)
+        template = render_template('mail_verify_register.html',content = content)
         msg = Message(
             subject,
             recipients=[to],

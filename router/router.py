@@ -1,4 +1,4 @@
-from flask import Blueprint, Flask, render_template, url_for
+from flask import Blueprint
 from app.controller.user_controller import UsersController
 from app.controller.product_controller import ProductController
 from app.controller.category_controller import CategoryController
@@ -6,10 +6,7 @@ from app.controller.company_controller import ComponyController
 from app.controller.transaction_controller import TransactionController
 from app.controller.authority_controller import AuthorityController
 from app.controller.dashboard_controller import DashboardController
-from app.manage import app
 import os
-
-
 from flask import request
 
 urls_blueprint = Blueprint('urls', __name__, url_prefix='/v1')
@@ -293,11 +290,15 @@ def delete_authority():
     }
     
     return AuthorityController().delete_authority(param)
-# ======================end router Authority ============================
+# ====================== end router Authority ============================
+
+# ======================  router verify_account ============================
 @urls_blueprint.route('/verify_account/<base_code>', methods=['GET'])
 def get_email(base_code):
     param = {
         'token':base_code
     }
     return UsersController().verify_account(param)
+
+# ====================== end router verify_account ============================
 

@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import jsonify
 from flask_restful import Resource
 from app.helpers.helpers import Helpers
 from app.helpers.response import ResponseApi
