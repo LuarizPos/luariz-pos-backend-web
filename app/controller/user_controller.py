@@ -67,6 +67,10 @@ class UsersController(Resource):
                     validation = ValidationInput().validation_register(form_req)
                     if validation['code'] == 200:
                         input_data = validation['result']
+                        code_activated = secrets.token_urlsafe(16)
+                        encode_validation = Helpers().create_session(input_data,'not_confirm',code_activated)
+                        SendEmail().send_email_confirm_register(input_data,encode_validation)
+                        
                         Companys = CompanyModels.query.filter_by(name=input_data["company_name"]).first()
                         data_companys = company_schema.dump(Companys)
                         if not data_companys:
@@ -77,12 +81,9 @@ class UsersController(Resource):
                             Company = CompanyModels.query.filter_by(name=input_data["company_name"]).first()
                             data_company = company_schema.dump(Company)
                             if data_company:
-                                code_activated = secrets.token_urlsafe(16)
                                 new_user = UsersModel(input_data['name'], input_data['email'] , input_data['no_telp'], input_data['password'], input_data['role_id'], 'null', data_company["id"], input_data['address'],'not_confirm',code_activated)
                                 db.session.add(new_user)
                                 db.session.commit()
-                                encode_validation = Helpers().create_session(input_data,'not_confirm',code_activated)
-                                SendEmail().send_email_confirm_register(input_data,encode_validation)
                                 # print(encode_validation)
                                 # pdb.run('mymodule.test()')
                                 data = {
