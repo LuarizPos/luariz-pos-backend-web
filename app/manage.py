@@ -10,11 +10,11 @@ from flask_mail import Mail
 # from dotenv import load_dotenv
 import os
 
-# Config Imaegekit
+# Config ImageKit
 imagekit = ImageKit(
     private_key = os.getenv('PRIVATE_KEY_IMAGEKIT'),
     public_key = os.getenv('PUBLIC_KEY_IMAGEKIT'),
-    url_endpoint = os.getenv('URL_ENDPOINT_IMAEKIT'),
+    url_endpoint = os.getenv('URL_ENDPOINT_IMAGEKIT'),
 )
 UseImagekit = os.getenv('USE_IMAGEKIT')
 
