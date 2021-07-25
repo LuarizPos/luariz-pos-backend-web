@@ -26,6 +26,7 @@ flask-cors = "*"
 cloudinary = "*"
 imagekitio = "*"
 flask-mail = "*"
+pipfile = "*"
 
 [requires]
 python_version = "3.8"
