@@ -63,43 +63,50 @@ class UsersController(Resource):
         if Helpers().cek_auth(param):
             form_req = param['form']
             if form_req:
-                try:
-                    validation = ValidationInput().validation_register(form_req)
-                    if validation['code'] == 200:
-                        input_data = validation['result']
-                        code_activated = secrets.token_urlsafe(16)
-                        encode_validation = Helpers().create_session(input_data,'not_confirm',code_activated)
-                        SendEmail().send_email_confirm_register(input_data,encode_validation)
-                        
-                        Companys = CompanyModels.query.filter_by(name=input_data["company_name"]).first()
-                        data_companys = company_schema.dump(Companys)
-                        if not data_companys:
-                            new_company = CompanyModels(input_data['company_name'], input_data['address'], input_data['no_telp'], 
-                                    '', '', input_data['email'], '')
-                            db.session.add(new_company)
-                            db.session.commit()
-                            Company = CompanyModels.query.filter_by(name=input_data["company_name"]).first()
-                            data_company = company_schema.dump(Company)
-                            if data_company:
-                                new_user = UsersModel(input_data['name'], input_data['email'] , input_data['no_telp'], input_data['password'], input_data['role_id'], 'null', data_company["id"], input_data['address'],'not_confirm',code_activated)
-                                db.session.add(new_user)
+                
+                validation = ValidationInput().validation_register(form_req)
+                if validation['code'] == 200:
+                    input_data = validation['result']
+                    code_activated = secrets.token_urlsafe(16)
+                    encode_validation = Helpers().create_session(input_data,'not_confirm',code_activated)
+                    Email = SendEmail().send_email_confirm_register(params=input_data,encode_validation=encode_validation,cek_connection=True)
+                    if Email['code'] == 200:
+                        try:
+                            Companys = CompanyModels.query.filter_by(name=input_data["company_name"]).first()
+                            data_companys = company_schema.dump(Companys)
+                            if not data_companys:
+                                new_company = CompanyModels(input_data['company_name'], input_data['address'], input_data['no_telp'], 
+                                        '', '', input_data['email'], '')
+                                db.session.add(new_company)
                                 db.session.commit()
-                                # print(encode_validation)
-                                # pdb.run('mymodule.test()')
-                                data = {
-                                    "name" : input_data['name'],
-                                    "email" : input_data['email']
-                                }
-                                result = ResponseApi().error_response(200, "Register", "Register Succes Cek Your Email", start_time, data)
+                                Company = CompanyModels.query.filter_by(name=input_data["company_name"]).first()
+                                data_company = company_schema.dump(Company)
+                                if data_company:
+                                    new_user = UsersModel(input_data['name'], input_data['email'] , input_data['no_telp'], input_data['password'], input_data['role_id'], 'null', data_company["id"], input_data['address'],'not_confirm',code_activated)
+                                    db.session.add(new_user)
+                                    db.session.commit()
+                                    encode_validation = Helpers().create_session(input_data,'not_confirm',code_activated)
+                                    Email = SendEmail().send_email_confirm_register(params=input_data,encode_validation=encode_validation,cek_connection=False)
+                                    print(Email)
+                                    # pdb.run('mymodule.test()')
+                                    data = {
+                                        "name" : input_data['name'],
+                                        "email" : input_data['email']
+                                    }
+                                    result = ResponseApi().error_response(200, "Register", "Register Succes Cek Your Email", start_time, data)
+                                else:
+                                    result = ResponseApi().error_response(400, "Register", "Company cannot be saved", start_time)
                             else:
-                                result = ResponseApi().error_response(400, "Register", "Company cannot be saved", start_time)
-                        else:
-                            result = ResponseApi().error_response(400, "Register", "Company Already Exist Please Change Your Name Company", start_time)
+                                result = ResponseApi().error_response(400, "Register", "Company Already Exist Please Change Your Name Company", start_time)
+                        except Exception as e:
+                            error  = str(e)
+                            result = ResponseApi().error_response(400, "Register", error, start_time) 
                     else:
-                        result = ResponseApi().error_response(validation['code'], "Logout", validation['message'], start_time)
-                except Exception as e:
-                    error  = str(e)
-                    result = ResponseApi().error_response(400, "Register", error, start_time) 
+                        result = ResponseApi().error_response(Email['code'], "Register", Email['Message'], start_time)
+                    
+                else:
+                    result = ResponseApi().error_response(validation['code'], "Logout", validation['message'], start_time)
+                
             else:
                 result = ResponseApi().error_response(400, "Register", "Form Request Is Empty", start_time)
         else:

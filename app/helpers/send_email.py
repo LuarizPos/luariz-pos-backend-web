@@ -6,9 +6,15 @@ from flask import render_template, request
 import os
 
 class SendEmail(Resource):
-    def send_email_confirm_register(self,params,encode_validation):
+    def send_email_confirm_register(self,**kwargs):
         subject = "【Luariz Pos】Confirm Your Registration"
-        to = params['email']
+        cek_connection = kwargs['cek_connection']
+        if cek_connection is not True:
+            to = kwargs['params']['email']
+            encode_validation = kwargs['encode_validation']
+        else:
+            to = 'startcode01@gmail.com'
+            encode_validation = kwargs['encode_validation']
         sender = os.getenv('MAIL_USERNAME')
         url_roots = request.url_root
         content = {
@@ -22,5 +28,19 @@ class SendEmail(Resource):
             html=template,
             sender= sender
         )
-        mail.send(msg)
-        return mail
+        try:
+            mail.send(msg)
+            response = {
+                "code":200,
+                "status":"Succes",
+                "Message":"Send Email Succes",
+            }
+        except Exception as e:
+            error  = str(e)
+            response = {
+                "code":400,
+                "status":"Succes",
+                "Message":"Email Not Send",
+        }
+        
+        return response
